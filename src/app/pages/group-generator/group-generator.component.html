@@ -1,30 +1,32 @@
-<h2>Générateur de groupes</h2>
+<h2>Composant de génération de groupes</h2>
 
-<label>
-  Nombre de groupes :
-  <input type="number" [(ngModel)]="groupCount" min="1" />
-</label>
+<div>
+  <label>
+    Nombre de groupes :
+    <input type="number" [(ngModel)]="numberOfGroups" min="1" />
+  </label>
+</div>
 
-<label>
-  <input type="checkbox" [(ngModel)]="criteria.mixFormerDwwm" />
-  Mixer les anciens DWWM
-</label>
-
-<label>
-  <input type="checkbox" [(ngModel)]="criteria.mixAges" />
-  Mixer les âges (pas encore implémenté)
-</label>
+<div>
+  <label>
+    <input type="checkbox" [(ngModel)]="criteria.mixerAncienDwwm" />
+    Mixer anciens DWWM
+  </label>
+  <label>
+    <input type="checkbox" [(ngModel)]="criteria.mixerAge" />
+    Mixer âge
+  </label>
+</div>
 
 <button (click)="generate()">Générer les groupes</button>
 
-<div *ngIf="groups.length">
-  <h3>Groupes générés</h3>
-  <div *ngFor="let group of groups" style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
-    <h4>{{ group.name }}</h4>
+<div *ngIf="errorMessage" style="color: red;">{{ errorMessage }}</div>
+
+<div *ngIf="groups">
+  <div *ngFor="let group of groups">
+    <h3>{{ group.name }}</h3>
     <ul>
-      <li *ngFor="let person of group.persons">
-        {{ person.lastName }} - {{ person.age }} ans - {{ person.isFormerDwwm ? 'Ancien DWWM' : 'Non' }}
-      </li>
+      <li *ngFor="let person of group.persons">{{ person.lastName }} ({{ person.age }} ans)</li>
     </ul>
   </div>
 </div>

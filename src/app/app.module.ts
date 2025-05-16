@@ -2,7 +2,9 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import { Routes } from '@angular/router';
-
+import { GroupGeneratorComponent } from './pages/group-generator/group-generator.component';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './auth/login/login.component';
 import { ListsComponent } from './pages/lists/lists.component';
@@ -12,7 +14,7 @@ const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' }, // 'full' ici doit être littéral, pas une variable
   { path: 'login', component: LoginComponent },
   { path: 'lists', component: ListsComponent },
-  // autres routes ...
+  { path: 'group-generator', component: GroupGeneratorComponent }, // <-- ajoute ça
 ];
 
 
@@ -21,12 +23,15 @@ const routes: Routes = [
     AppComponent,
     LoginComponent,
     ListsComponent,
-    // autres composants ici
-  ],
-  imports: [
-    BrowserModule,
-    RouterModule.forRoot(routes),  // <-- ici dans imports du module
-  ],
+    GroupGeneratorComponent,
+    ],
+    
+imports: [
+  BrowserModule,  // contient CommonModule, mais parfois il faut expliciter si problème
+  CommonModule,   // <-- ajoute-le explicitement
+  FormsModule,
+  RouterModule.forRoot(routes),
+],
   providers: [],
   bootstrap: [AppComponent]
 })

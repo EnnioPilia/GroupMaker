@@ -1,23 +1,8 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
-interface Person {
-  id: number;
-  lastName: string;
-  gender: string;
-  frenchLevel: number;
-  isFormerDwwm: boolean;
-  technicalLevel: number;
-  profile: string;
-  age: number;
-}
-
-interface Group {
-  id: number;
-  name: string;
-  persons: Person[];
-}
+import { Router } from '@angular/router';
+import { ListService, List, Person } from '../../core/list.service';
 
 @Component({
   selector: 'app-lists',
@@ -27,50 +12,46 @@ interface Group {
   styleUrls: ['./lists.component.css']
 })
 export class ListsComponent {
-  lists: Group[] = [];
+  lists: List[] = [];
   newListName = '';
   errorMessage = '';
-  selectedListId: number | null = null;
+  selectedListId: string | null = null;
 
-  nextListId = 1;
-  nextPersonId = 1;
-
-  // Person form data
   formPerson: Person = this.getEmptyPerson();
   isEditMode = false;
 
-  constructor() {
-    // Initialize with some empty data if you want
+  constructor(private router: Router, private listService: ListService) {
+    this.lists = this.listService.getLists();
+  }
+
+  goToGroupGenerator() {
+    this.router.navigate(['/group-generator']);
   }
 
   addList() {
     if (!this.newListName.trim()) return;
-    if (this.lists.find(l => l.name.toLowerCase() === this.newListName.trim().toLowerCase())) {
+    const success = this.listService.addList(this.newListName.trim());
+    if (!success) {
       this.errorMessage = 'Le nom existe déjà';
       return;
     }
-
-    this.lists.push({
-      id: this.nextListId++,
-      name: this.newListName.trim(),
-      persons: []
-    });
-
+    this.lists = this.listService.getLists();
     this.newListName = '';
     this.errorMessage = '';
   }
 
-  deleteList(id: number) {
-    this.lists = this.lists.filter(l => l.id !== id);
+  deleteList(id: string) {
+    this.listService.deleteList(id);
+    this.lists = this.listService.getLists();
     if (this.selectedListId === id) this.selectedListId = null;
   }
 
-  selectList(id: number) {
+  selectList(id: string) {
     this.selectedListId = this.selectedListId === id ? null : id;
     this.cancelPersonForm();
   }
 
-  get selectedList(): Group | undefined {
+  get selectedList(): List | undefined {
     return this.lists.find(l => l.id === this.selectedListId!);
   }
 
@@ -80,7 +61,7 @@ export class ListsComponent {
 
   getEmptyPerson(): Person {
     return {
-      id: 0,
+      id: '',
       lastName: '',
       gender: 'masculin',
       frenchLevel: 1,
@@ -101,10 +82,14 @@ export class ListsComponent {
       const idx = this.selectedList.persons.findIndex(p => p.id === this.formPerson.id);
       if (idx > -1) this.selectedList.persons[idx] = { ...this.formPerson };
     } else {
-      this.formPerson.id = this.nextPersonId++;
+      this.formPerson.id = crypto.randomUUID();
       this.selectedList.persons.push({ ...this.formPerson });
     }
 
+    // Mets à jour la liste via le service
+    this.listService.updateList(this.selectedList.id, this.selectedList.name, this.selectedList.persons);
+
+    this.lists = this.listService.getLists(); // rafraîchir la liste
     this.cancelPersonForm();
   }
 
@@ -113,9 +98,14 @@ export class ListsComponent {
     this.isEditMode = true;
   }
 
-  deletePerson(personId: number) {
+  deletePerson(personId: string) {
     if (!this.selectedList) return;
     this.selectedList.persons = this.selectedList.persons.filter(p => p.id !== personId);
+
+    // Mets à jour la liste via le service
+    this.listService.updateList(this.selectedList.id, this.selectedList.name, this.selectedList.persons);
+
+    this.lists = this.listService.getLists(); // rafraîchir la liste
     this.cancelPersonForm();
   }
 

@@ -1,8 +1,16 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
+
 export interface Person {
-  // On complétera plus tard
+  id: string;
+  lastName: string;
+  gender: string;
+  frenchLevel: number;
+  isFormerDwwm: boolean;
+  technicalLevel: number;
+  profile: string;
+  age: number;
 }
 
 export interface List {
@@ -18,7 +26,6 @@ export interface List {
 export class ListService {
   private storageKey = 'groupmaker_lists';
 
-  // Comportement observable pour les listes
   private listsSubject = new BehaviorSubject<List[]>(this.loadLists());
   lists$ = this.listsSubject.asObservable();
 
@@ -38,18 +45,15 @@ export class ListService {
 
   addList(name: string): boolean {
     const lists = this.getLists();
-
     if (lists.find(l => l.name.toLowerCase() === name.toLowerCase())) {
       return false; // nom déjà utilisé
     }
-
     const newList: List = {
       id: crypto.randomUUID(),
       name,
       persons: [],
       draws: 0
     };
-
     lists.push(newList);
     this.saveLists(lists);
     return true;
@@ -60,7 +64,7 @@ export class ListService {
     this.saveLists(lists);
   }
 
-  updateList(id: string, newName: string): boolean {
+  updateList(id: string, newName: string, persons?: Person[]): boolean {
     const lists = this.getLists();
     const listToUpdate = lists.find(l => l.id === id);
     if (!listToUpdate) return false;
@@ -70,6 +74,10 @@ export class ListService {
     }
 
     listToUpdate.name = newName;
+    if (persons) {
+      listToUpdate.persons = persons;
+    }
+
     this.saveLists(lists);
     return true;
   }

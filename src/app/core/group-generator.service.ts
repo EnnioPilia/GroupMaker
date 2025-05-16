@@ -1,66 +1,89 @@
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { Injectable } from '@angular/core';
+import { ListService, List, Person } from './../core/list.services';
 
-export interface Person {
-  id: number;
-  lastName: string;
-  gender: string;
-  frenchLevel: number;
-  isFormerDwwm: boolean;
-  technicalLevel: number;
-  profile: string;
-  age: number;
-}
+
+
 
 export interface Group {
-  id: number;
+  id: string;
   name: string;
-  persons: Person[];
+  members: Person[];
 }
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
+
+@Component({
+  selector: 'app-group-generator',
+  templateUrl: './group-generator.component.html',
+  styleUrls: ['./group-generator.component.css'],
+  imports: [CommonModule, FormsModule]
+})
+
 export class GroupGeneratorService {
-  private history: Group[][] = [];
 
-  constructor() {}
+  constructor() { }
 
-  generateGroups(
-    persons: Person[],
-    groupCount: number,
-    criteria: { mixFormerDwwm: boolean; mixAges: boolean }
-  ): Group[] {
-    if (groupCount < 1) return [];
-
-    // Initialiser les groupes
-    const groups: Group[] = [];
-    for (let i = 0; i < groupCount; i++) {
-      groups.push({ id: i + 1, name: `Groupe ${i + 1}`, persons: [] });
+  generateGroups(persons: Person[], nbGroups: number, criteria: any): Group[] | null {
+    if (!persons || persons.length === 0 || nbGroups <= 0) {
+      return null;
     }
 
-    // Exemple simple de mixage selon ancien DWWM (répartir les anciens DWWM d'abord)
-    let formerDwwm = persons.filter((p) => p.isFormerDwwm);
-    let others = persons.filter((p) => !p.isFormerDwwm);
+    // Simple exemple : répartir les personnes en nbGroups groupes équilibrés
+    const groups: Group[] = [];
 
-    // Répartir les anciens DWWM
-    formerDwwm.forEach((person, i) => {
-      groups[i % groupCount].persons.push(person);
+    // Création des groupes vides
+    for (let i = 0; i < nbGroups; i++) {
+      groups.push({
+        id: `group-${i + 1}`,
+        name: `Groupe ${i + 1}`,
+        members: []
+      });
+    }
+
+    // Mélange aléatoire des personnes (pour la répartition)
+    const shuffledPersons = [...persons].sort(() => Math.random() - 0.5);
+
+    // Répartition des personnes dans les groupes
+    shuffledPersons.forEach((person, index) => {
+      const groupIndex = index % nbGroups;
+      groups[groupIndex].members.push(person);
     });
-
-    // Puis les autres
-    others.forEach((person, i) => {
-      groups[i % groupCount].persons.push(person);
-    });
-
-    // TODO: ajouter mixage sur les âges et autres critères si besoin
-
-    // Historique simple : stocker ce tirage
-    this.history.push(groups.map(g => ({ ...g, persons: [...g.persons] })));
 
     return groups;
   }
+}
+export class GroupGeneratorComponent {
+  persons: Person[] = [];
+  numberOfGroups = 2;
+  groups: Group[] | null = null;
+  errorMessage = '';
+  criteria = {
+    mixerAncienDwwm: false,
+    mixerAge: false
+  };
 
-  getHistory(): Group[][] {
-    return this.history;
+  constructor(private groupGenerator: GroupGeneratorService, private listService: ListService) {
+    this.loadPersons();
+  }
+
+  loadPersons() {
+    // Récupère toutes les personnes dans toutes les listes
+    this.persons = this.listService.getLists().flatMap(list => list.persons);
+  }
+
+  generate() {
+    this.loadPersons(); // actualiser avant génération
+    const result = this.groupGenerator.generateGroups(this.persons, this.numberOfGroups, this.criteria);
+    if (result) {
+      this.groups = result;
+      this.errorMessage = '';
+    } else {
+      this.errorMessage = 'Impossible de générer des groupes différents. Essayez de modifier les critères.';
+    }
   }
 }
