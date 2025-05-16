@@ -1,0 +1,30 @@
+<h2>Générateur de groupes</h2>
+
+<label>
+  Nombre de groupes :
+  <input type="number" [(ngModel)]="groupCount" min="1" />
+</label>
+
+<label>
+  <input type="checkbox" [(ngModel)]="criteria.mixFormerDwwm" />
+  Mixer les anciens DWWM
+</label>
+
+<label>
+  <input type="checkbox" [(ngModel)]="criteria.mixAges" />
+  Mixer les âges (pas encore implémenté)
+</label>
+
+<button (click)="generate()">Générer les groupes</button>
+
+<div *ngIf="groups.length">
+  <h3>Groupes générés</h3>
+  <div *ngFor="let group of groups" style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+    <h4>{{ group.name }}</h4>
+    <ul>
+      <li *ngFor="let person of group.persons">
+        {{ person.lastName }} - {{ person.age }} ans - {{ person.isFormerDwwm ? 'Ancien DWWM' : 'Non' }}
+      </li>
+    </ul>
+  </div>
+</div>
