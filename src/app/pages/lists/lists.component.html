@@ -1,20 +1,23 @@
-<h2>Mes listes</h2>
+<body>
+<div class="list">
+  <h2>Mes listes</h2>
+  <input [(ngModel)]="newListName" placeholder="Nom de la liste" />
+  <button class="creat-btn" (click)="createList()">Créer</button>
+  <div *ngIf="errorMessage" style="color: red;">{{ errorMessage }}</div>
+</div>
 
-<input [(ngModel)]="newListName" placeholder="Nom de la liste" />
-<button (click)="createList()">Créer</button>
-<div *ngIf="errorMessage" style="color: red;">{{ errorMessage }}</div>
-
+<div class="listContainer">
 <ul>
   <li *ngFor="let list of lists">
     <strong>{{ list.name }}</strong>
     <button (click)="selectList(list.id)">
-      {{ selectedListId === list.id ? 'Cacher personnes' : 'Ajouter personnes' }}</button>
-    <button (click)="deleteList(list.id)">Supprimer</button>
+      {{ selectedListId === list.id ? 'Cacher liste' : 'Ajouter personnes' }}</button>
+    <button class="deleteBtn" (click)="deleteList(list.id)">Supprimer</button>
 
-    <div *ngIf="selectedListId === list.id" style="margin-top: 1rem; border: 1px solid #ccc; padding: 10px;">
-      <h3>Personnes de la liste {{ list.name }}</h3>
+    <div *ngIf="selectedListId === list.id" class="container">
 
-      <form (ngSubmit)="submitPerson()">
+
+      <form (ngSubmit)="submitPerson()" class="form-left">
         <label>
           Nom :
           <input
@@ -42,8 +45,8 @@
           </select>
         </label>
 
-        <label>
-          Ancien DWWM :
+        <label class="dwwn">
+          Ancien DWWM 
           <input type="checkbox" [(ngModel)]="formPerson.isFormerDwwm" name="isFormerDwwm" />
         </label>
 
@@ -79,7 +82,8 @@
         <button type="button" (click)="cancelPersonForm()" *ngIf="isEditMode">Annuler</button>
       </form>
 
-      <h4>Liste des personnes</h4>
+      <div class="table-right" >
+        <h4>Liste des personnes :</h4>
       <table border="1" cellpadding="5" cellspacing="0">
         <thead>
           <tr>
@@ -90,7 +94,6 @@
             <th>Technique</th>
             <th>Profil</th>
             <th>Âge</th>
-            <th>Actions</th>
           </tr>
         </thead>
         <tbody *ngIf="persons && persons.length > 0; else noPersons">
@@ -103,19 +106,27 @@
             <td>{{ person.profile }}</td>
             <td>{{ person.age }}</td>
             <td>
-              <button (click)="edit(person)">Modifier</button>
-              <button (click)="deletePerson(person.id)">Supprimer</button>
+              <!-- <button class="editBtn" (click)="edit(person)">Modifier</button> -->
+              <button class="deleteBtn" (click)="deletePerson(person.id)">Supprimer</button>
             </td>
           </tr>
         </tbody>
         <ng-template #noPersons>
-  <tr><td colspan="8">Aucune personne dans cette liste.</td></tr>
-</ng-template>
+        <tr><td colspan="8">Aucune personne dans cette liste.</td></tr>
+          </ng-template>
       </table>
+      </div>
+
     </div>
   </li>
 </ul>
 
+</div>
+<div class="generator">
 <a routerLink="/group-generator">
 <button type="button" (click)="goToGroupGenerator()">Générer des groupes</button>
 </a>
+
+</div>
+
+</body>

@@ -47,8 +47,8 @@ export class ListsComponent implements OnInit {
   createList() {
     const name = this.newListName.trim();
 
-    if (name.length < 3) {
-      this.errorMessage = 'Le nom de la liste doit contenir au moins 3 caractères.';
+    if (name === "") {
+      this.errorMessage = 'Veuilliez entrer un nom de liste';
       return;
     }
 
