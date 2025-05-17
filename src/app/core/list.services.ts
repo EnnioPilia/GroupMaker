@@ -1,17 +1,9 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { Person } from './models/person.model';  // chemin à ajuster selon ton arborescence
 
 
-export interface Person {
-  id: string;
-  lastName: string;
-  gender: string;
-  frenchLevel: number;
-  isFormerDwwm: boolean;
-  technicalLevel: number;
-  profile: string;
-  age: number;
-}
+
 
 export interface List {
   id: string;

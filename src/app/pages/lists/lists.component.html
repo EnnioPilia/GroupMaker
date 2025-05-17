@@ -1,15 +1,14 @@
 <h2>Mes listes</h2>
 
 <input [(ngModel)]="newListName" placeholder="Nom de la liste" />
-<button (click)="addList()">Créer</button>
+<button (click)="createList()">Créer</button>
 <div *ngIf="errorMessage" style="color: red;">{{ errorMessage }}</div>
 
 <ul>
   <li *ngFor="let list of lists">
     <strong>{{ list.name }}</strong>
     <button (click)="selectList(list.id)">
-      {{ selectedListId === list.id ? 'Cacher personnes' : 'Ajouter personnes' }}
-    </button>
+      {{ selectedListId === list.id ? 'Cacher personnes' : 'Ajouter personnes' }}</button>
     <button (click)="deleteList(list.id)">Supprimer</button>
 
     <div *ngIf="selectedListId === list.id" style="margin-top: 1rem; border: 1px solid #ccc; padding: 10px;">
@@ -94,7 +93,7 @@
             <th>Actions</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody *ngIf="persons && persons.length > 0; else noPersons">
           <tr *ngFor="let person of persons">
             <td>{{ person.lastName }}</td>
             <td>{{ person.gender }}</td>
@@ -109,6 +108,9 @@
             </td>
           </tr>
         </tbody>
+        <ng-template #noPersons>
+  <tr><td colspan="8">Aucune personne dans cette liste.</td></tr>
+</ng-template>
       </table>
     </div>
   </li>

@@ -1,10 +1,10 @@
 export interface Person {
-  id: number;
+  id: number;       // id en number
   lastName: string;
   gender: 'masculin' | 'féminin' | 'ne se prononce pas';
-  frenchLevel: number;  // 1 à 4
+  frenchLevel: number;
   isFormerDwwm: boolean;
-  technicalLevel: number;  // 1 à 4
+  technicalLevel: number;
   profile: 'timide' | 'réservé' | 'à l’aise';
-  age: number;  // 1 à 99
+  age: number;
 }

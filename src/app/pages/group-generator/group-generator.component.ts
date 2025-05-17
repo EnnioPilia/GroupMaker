@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common'; 
 import { FormsModule } from '@angular/forms';
-import { GroupGeneratorService, Group } from '../../core/group-generator.service';
-import { ListService, Person } from '../../core/list.services';
+import { GroupGeneratorService } from '../../core/group-generator.service';
+import { ListService } from '../../core/list.services';
+import { Group } from '../../core/models/group.model';
+import { Person } from '../../core/models/person.model';
 
 @Component({
   selector: 'app-group-generator',
@@ -10,6 +12,7 @@ import { ListService, Person } from '../../core/list.services';
   styleUrls: ['./group-generator.component.css'],
   imports: [CommonModule,FormsModule]
 })
+
 export class GroupGeneratorComponent {
   persons: Person[] = [];  // Ici tu dois récupérer ta liste réelle des personnes à grouper
   numberOfGroups = 2;
