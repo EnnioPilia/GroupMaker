@@ -1,0 +1,91 @@
+.login-container {
+  margin: 4rem auto;
+  padding: 2rem;
+  width: 30%;
+  background-color: #f3e5da;
+  border: 1px solid #c29b7f;
+  border-radius: 10px;
+  color: #3a2a20;
+  font-family: 'Reggae One', cursive;
+}
+
+.login-container h2 {
+  text-align: center;
+  color: #5e3b2c;
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.login-container form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.login-container label {
+  font-weight: bold;
+  color: #5e3b2c;
+  font-size: 1rem;
+}
+
+.login-container input {
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #7a5a49;
+  border-radius: 6px;
+  background-color: #f8e7de;
+  color: #3a2a20;
+}
+
+.login-container button {
+  padding: 10px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  background-color: #6f4f3a;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.login-container button:hover {
+  background-color: #5a3c2a;
+}
+
+.error {
+  color: red;
+  font-weight: bold;
+}
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #5e3b2c;
+  padding: 10px 40px;
+  color: #fff;
+  font-size: 1.2rem;
+  border-bottom: 3px solid #a86d4f;
+}
+
+.navbar-brand {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #f1d7c3;
+}
+
+.navbar-menu {
+  list-style: none;
+  display: flex;
+  gap: 2rem;
+}
+
+.navbar-menu li a {
+  text-decoration: none;
+  color: #f1d7c3;
+  transition: color 0.3s;
+}
+
+.navbar-menu li a:hover {
+  color: #d5a365;
+}
