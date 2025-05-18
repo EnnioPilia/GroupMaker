@@ -8,7 +8,7 @@ import { FormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './auth/login/login.component';
 import { ListsComponent } from './pages/lists/lists.component';
-// tes autres composants ici
+import { HomeComponent } from './pages/home/home.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' }, // 'full' ici doit être littéral, pas une variable
@@ -24,6 +24,7 @@ const routes: Routes = [
     LoginComponent,
     ListsComponent,
     GroupGeneratorComponent,
+    HomeComponent,
     ],
     
 imports: [

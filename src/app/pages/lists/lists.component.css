@@ -1,7 +1,12 @@
-    body {
-        font-family: 'Reggae One', cursive !important;
-        background-color: #e2c7af;
-        color: #3a2a20;
+ body {
+      font-family: 'Reggae One', cursive !important;
+      background-color: #e2c7af;
+      color: #3a2a20;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
     }
 
     h2 {
@@ -26,7 +31,7 @@
 
     .btn-primary-custom {
         background-color: #a86d4f;
-          color: #facdb4;              
+          color: #f3cfbc;              
         border: none;
     }
 
@@ -111,4 +116,8 @@
         max-height: 40px;
         overflow-y: auto;
         padding: 4px;
+    }
+
+    strong{
+        font-size: 2rem;
     }

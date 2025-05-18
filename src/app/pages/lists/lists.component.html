@@ -13,8 +13,8 @@
 
   <div class="container my-5 " >
 
-    <div class="card shadow-sm mx-auto mb-4 bg-list-header " style="max-width: 400px;">
-      <div class="card-body text-center ">
+    <div class="card shadow-sm mx-auto mb-5 bg-list-header  p-4" style="max-width: 500px;">
+      <div class="card-body text-center">
         <h2 >Mes listes</h2>
         <input [(ngModel)]="newListName" class="form-control form-control-custom mb-2 text-center "
           placeholder="Nom de la liste" />
@@ -26,7 +26,7 @@
     <ul class="list-unstyled">
       <li *ngFor="let list of lists" class="card mb-4 mx-auto bg-list-card" style="max-width: 1500px;">
         <div class="card-body">
-          <div class="d-flex justify-content-between align-items-center mb-3">
+          <div class="d-flex justify-content-between align-items-center mb-1">
             <strong>{{ list.name }}</strong>
             <div>
               <button class="btn btn-sm btn-secondary-custom me-2" (click)="selectList(list.id)">
