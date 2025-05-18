@@ -10,7 +10,7 @@
     }
 
     .bg-list-header {
-      background-color: #f1d7c3;
+     background-color: #f4e3d6;
       border: 1.5px solid #c29b7f;
       color: #3a2a20;
       border-radius: 0.75rem;
@@ -29,8 +29,7 @@
     }
 
     .form-control-custom {
-      background-color: #f8e7de;
-      border: 1px solid #7a5a49;
+    background-color: #e0cbc0;      border: 1px solid #7a5a49;
       color: #3a2a20;
       border-radius: 0.375rem;
       transition: border-color 0.3s ease;

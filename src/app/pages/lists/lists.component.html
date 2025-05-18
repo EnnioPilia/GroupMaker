@@ -13,7 +13,7 @@
 
   <div class="container my-5 " >
 
-    <div class="card shadow-sm mx-auto mb-5 bg-list-header  p-4" style="max-width: 500px;">
+<div class="card mx-auto mb-5 bg-list-header p-4" style="max-width: 500px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5); border: 2px solid #c29b7f; border-radius: 0.75rem;">
       <div class="card-body text-center">
         <h2 >Mes listes</h2>
         <input [(ngModel)]="newListName" class="form-control form-control-custom mb-2 text-center "
@@ -109,7 +109,7 @@
                       <th>Tech</th>
                       <th>Profil</th>
                       <th>Âge</th>
-                      <th>Action</th>
+                      <th>Supprimer</th>
                     </tr>
                   </thead>
                   <tbody *ngIf="persons && persons.length > 0; else noPersons">
@@ -132,7 +132,7 @@
                   </tbody>
                 </table>
                 <ng-template #noPersons>
-                  <p class="text-muted">Aucune personne dans cette liste.</p>
+                  <p class="text-muted">Aucune personne</p>
                 </ng-template>
               </div>
             </div>

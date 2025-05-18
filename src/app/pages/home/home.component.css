@@ -16,7 +16,9 @@ html {
 h1 {
   /* font-family: "Shadows Into Light", cursive; */
   font-family: "Poiret One", sans-serif;
-  font-size: 11rem;
+  font-size: 10rem;
+  color: #5e3b2c;
+
 }
 
 .content-area {
@@ -25,7 +27,7 @@ h1 {
 }
 
 .navbar-custom {
-  background-color: #f5d7c1;
+  background-color: #f5cfb5;
   border-bottom: 2px solid #c29b7f;
   height: 70px;
   width: 100%;
