@@ -13,19 +13,21 @@ import { Person } from '../../core/models/person.model';
   templateUrl: './person-list.component.html',
   styleUrls: ['./person-list.component.css']
 })
-
 export class PersonListComponent implements OnInit {
-  listId!: number;
+  listId!: string;
   persons: Person[] = [];
 
   formPerson: Person = this.getEmptyPerson();
   isEditMode = false;
 
-  constructor(private route: ActivatedRoute, private personService: PersonService) {}
+  constructor(
+    private route: ActivatedRoute,
+    private personService: PersonService
+  ) {}
 
   ngOnInit() {
     this.route.params.subscribe(params => {
-      this.listId = +params['listId'];
+      this.listId = params['listId'];
       this.loadPersons();
     });
   }
@@ -34,27 +36,29 @@ export class PersonListComponent implements OnInit {
     this.persons = this.personService.getPersons(this.listId);
   }
 
-submit() {
-  if (this.isEditMode) {
-    this.personService.updatePerson(this.listId, this.formPerson);
-  } else {
-    this.personService.addPerson(this.listId, this.formPerson);
+  submit() {
+    if (this.isEditMode) {
+      this.personService.updatePerson(this.listId, this.formPerson);
+    } else {
+      this.personService.addPerson(this.listId, this.formPerson);
+    }
+    this.formPerson = this.getEmptyPerson();
+    this.isEditMode = false;
+    this.loadPersons();
   }
-  this.formPerson = this.getEmptyPerson();
-  this.isEditMode = false;
-  this.loadPersons();  // ça recharge la liste sans changer de page
-}
 
-edit(person: Person) {
-  this.formPerson = { ...person };
-  this.isEditMode = true;
-}
-  delete(personId: number) {
+  edit(person: Person) {
+    this.formPerson = { ...person };
+    this.isEditMode = true;
+  }
+
+  delete(personId: string) {
     if (confirm('Voulez-vous vraiment supprimer cette personne ?')) {
       this.personService.deletePerson(this.listId, personId);
       this.loadPersons();
     }
   }
+
   cancel() {
     this.formPerson = this.getEmptyPerson();
     this.isEditMode = false;
@@ -62,7 +66,7 @@ edit(person: Person) {
 
   getEmptyPerson(): Person {
     return {
-      id: 0,
+      id: "",
       lastName: '',
       gender: 'masculin',
       frenchLevel: 1,

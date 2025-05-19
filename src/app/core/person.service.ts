@@ -30,4 +30,23 @@ export class PersonService {
       list[index] = updated;
     }
   }
+
+// deletePerson(personId: string) {
+//   if (!this.selectedListId) return;
+
+//   const list = this.lists.find(l => l.id === this.selectedListId);
+//   if (!list) return;
+
+//   list.persons = list.persons.filter(p => p.id !== personId);
+//   this.listService.updateList(list.id, list.name, list.persons);
+
+//   this.persons = list.persons;  // Mettre à jour la vue
+// }
+deletePerson(listId: string, personId: string) {
+  const persons = this.personsByList[listId];
+  if (!persons) return;
+
+  this.personsByList[listId] = persons.filter(p => p.id !== personId);
+}
+
 }

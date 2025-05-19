@@ -129,7 +129,7 @@
                       <td>{{ person.age }}</td>
                       <td>
                         <!-- <button class="editBtn" (click)="edit(person)">Modifier</button> -->
-                        <button class="btn btn-sm btn-danger-custom" (click)="deletePerson( person.id)">🗑️</button>
+                        <button (click)="deletePerson(person.id)">🗑️</button>
                       </td>
                     </tr>
                   </tbody>
