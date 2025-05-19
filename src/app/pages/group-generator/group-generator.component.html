@@ -2,20 +2,28 @@
   <div class="bg-list-header">
     <div class="bg-list-title">
       <div class="bg-list-header p-4 mb-4"
-        style="background-color: #ddb393 ;border: 2px solid #c29b7f; border-radius: 0.75rem;">
+        style="background-color: #ddb393; border: 2px solid #c29b7f; border-radius: 0.75rem;">
         <h2 class="text-center mb-0">Générateur de groupes</h2>
       </div>
+    </div>
 
+    <!-- Sélection de la liste -->
+    <div class="mb-4" style="max-width: 600px;">
+      <label for="listSelector" class="form-label">Choisissez une liste :</label>
+      <select id="listSelector" name="selectedListId" class="form-select form-control-custom"
+        style="background-color: #ddb393; border: 1px solid #7a5a49; color: #3a2a20; border-radius: 0.375rem;"
+        [(ngModel)]="selectedListId" (change)="loadPersons()">
+        <option [ngValue]="null">Sélectionnez une liste</option>
+        <option *ngFor="let list of lists" [ngValue]="list.id">{{ list.name }}</option>
+      </select>
     </div>
 
     <form #groupForm="ngForm" (ngSubmit)="generate()" novalidate>
-      <div class="d-flex align-items-center gap-4 mb-3" style="max-width: 600px; ">
-
+      <div class="d-flex align-items-center gap-4 mb-3" style="max-width: 600px;">
         <div style="min-width: 150px;">
           <label for="numberOfGroups" class="form-label">Nombre :</label>
-          <input style="width: 60px;  background-color: #ddb393;" type="number" id="numberOfGroups"
-            name="numberOfGroups" class="form-control form-control-custom " min="1" [(ngModel)]="numberOfGroups"
-            required />
+          <input style="width: 60px; background-color: #ddb393;" type="number" id="numberOfGroups" name="numberOfGroups"
+            class="form-control form-control-custom" min="1" [(ngModel)]="numberOfGroups" required />
         </div>
 
         <div class="form-check d-flex align-items-center me-3">
@@ -29,25 +37,33 @@
             [(ngModel)]="criteria.mixerAge" />
           <label for="mixerAge" class="form-check-label ms-2 mb-0">Mixer âge</label>
         </div>
-
       </div>
 
-      <button type="submit" class="btn btn-primary-custom d-block mx-auto mt-4" [disabled]="groupForm.invalid">
-        Générer les groupes
-      </button>
+      <div class="d-flex justify-content-center mt-4">
+        <button type="submit" class="btn btn-primary-custom" style="width: 45%;"
+          [disabled]="groupForm.invalid || !selectedListId">
+          Générer les groupes
+        </button>
+      </div>
+
     </form>
 
     <div *ngIf="errorMessage" class="text-danger mt-3 text-center fw-bold">{{ errorMessage }}</div>
 
-    <div *ngIf="groups" class="mt-4">
-      <div *ngFor="let group of groups" class="mb-3">
-        <h3>{{ group.name }}</h3>
+    <div *ngIf="groups && groups.length > 0" class="mt-4">
+
+ 
+      <div *ngFor="let group of groups" class="group-card mb-3">
+        <h3>{{ group.name }} ({{ group.listName }})</h3>
         <ul>
           <li *ngFor="let person of group.persons">
             {{ person.lastName }} ({{ person.age }} ans)
             <span *ngIf="person.isFormerDwwm">- Ancien DWWM</span>
           </li>
         </ul>
+      </div>
+           <div class="d-flex justify-content-center mb-3">
+        <button class="btn btn-danger-custom" (click)="clearGroups()">Supprimer les groupes</button>
       </div>
     </div>
   </div>
