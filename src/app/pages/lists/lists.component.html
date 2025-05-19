@@ -141,7 +141,7 @@
       </li>
     </ul>
 
-          <div class="text-center my-5">
+          <div class="text-center my-5" *ngIf="lists && lists.length > 0">
             <a routerLink="/group-generator">
               <button type="button" class="btn btn-secondary-custom fs-5 px-4 py-3 mb-5" style="border: 1px solid #7a5a49;"
                 (click)="goToGroupGenerator()">
@@ -149,7 +149,6 @@
               </button>
             </a>
           </div>
-
         </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
