@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common'; 
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { GroupGeneratorService } from '../../core/group-generator.service';
 import { ListService } from '../../core/list.services';
@@ -10,7 +10,7 @@ import { Person } from '../../core/models/person.model';
   selector: 'app-group-generator',
   templateUrl: './group-generator.component.html',
   styleUrls: ['./group-generator.component.css'],
-  imports: [CommonModule,FormsModule]
+  imports: [CommonModule, FormsModule]
 })
 
 export class GroupGeneratorComponent {

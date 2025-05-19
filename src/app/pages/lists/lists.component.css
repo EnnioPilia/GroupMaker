@@ -129,18 +129,19 @@ table.table-bordered th {
   border: 1.5px solid #6e4b3a !important;
 }
 
-  .nom-cell {
-    max-width: 150px;
-    padding: 0 !important;
-  }
+.nom-cell {
+  max-width: 150px; /* ou plus si nécessaire */
+  padding: 0 !important;
+}
 
-  .nom-cell > div {
-    max-height: 40px;
-    overflow-y: auto;
-    overflow-x: hidden;
-    display: block;
-    padding: 0.25rem 0.5rem;
-  }
+.nom-cell > div {
+  width: 150px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: block;
+  padding: 0.25rem 0.5rem;
+}
+
 
   .table-responsive {
     overflow-x: auto;

@@ -1,36 +1,41 @@
- <body>
- <div class="bg-list-header">
-  <div class="bg-list-title">
-<div class="bg-list-header p-4 mb-4" style= "background-color: #ddb393 ;border: 2px solid #c29b7f; border-radius: 0.75rem;">
-  <h2 class="text-center mb-0">Générateur de groupes</h2>
-</div>
+<body>
+  <div class="bg-list-header">
+    <div class="bg-list-title">
+      <div class="bg-list-header p-4 mb-4"
+        style="background-color: #ddb393 ;border: 2px solid #c29b7f; border-radius: 0.75rem;">
+        <h2 class="text-center mb-0">Générateur de groupes</h2>
+      </div>
 
-  </div>
-
-<form #groupForm="ngForm" (ngSubmit)="generate()" novalidate>
-  <div class="d-flex align-items-center gap-4 mb-3" style="max-width: 600px; ">
-    
-    <div style="min-width: 150px;">
-      <label for="numberOfGroups" class="form-label">Nombre :</label>
-      <input style="width: 60px"  type="number" id="numberOfGroups" name="numberOfGroups" class="form-control form-control-custom "  min="1" [(ngModel)]="numberOfGroups" required />
     </div>
 
-    <div class="form-check d-flex align-items-center me-3">
-      <input type="checkbox" id="mixerAncienDwwm" name="mixerAncienDwwm" class="form-check-input" [(ngModel)]="criteria.mixerAncienDwwm" />
-      <label for="mixerAncienDwwm" class="form-check-label ms-2 mb-0">Mixer  DWWM</label>
-    </div>
+    <form #groupForm="ngForm" (ngSubmit)="generate()" novalidate>
+      <div class="d-flex align-items-center gap-4 mb-3" style="max-width: 600px; ">
 
-    <div class="form-check d-flex align-items-center">
-      <input type="checkbox" id="mixerAge" name="mixerAge" class="form-check-input" [(ngModel)]="criteria.mixerAge" />
-      <label for="mixerAge" class="form-check-label ms-2 mb-0">Mixer âge</label>
-    </div>
+        <div style="min-width: 150px;">
+          <label for="numberOfGroups" class="form-label">Nombre :</label>
+          <input style="width: 60px;  background-color: #ddb393;" type="number" id="numberOfGroups"
+            name="numberOfGroups" class="form-control form-control-custom " min="1" [(ngModel)]="numberOfGroups"
+            required />
+        </div>
 
-  </div>
+        <div class="form-check d-flex align-items-center me-3">
+          <input type="checkbox" id="mixerAncienDwwm" name="mixerAncienDwwm" class="form-check-input"
+            [(ngModel)]="criteria.mixerAncienDwwm" />
+          <label for="mixerAncienDwwm" class="form-check-label ms-2 mb-0">Mixer DWWM</label>
+        </div>
 
-  <button type="submit" class="btn btn-primary-custom d-block mx-auto" [disabled]="groupForm.invalid">
-    Générer les groupes
-  </button>
-</form>
+        <div class="form-check d-flex align-items-center">
+          <input type="checkbox" id="mixerAge" name="mixerAge" class="form-check-input"
+            [(ngModel)]="criteria.mixerAge" />
+          <label for="mixerAge" class="form-check-label ms-2 mb-0">Mixer âge</label>
+        </div>
+
+      </div>
+
+      <button type="submit" class="btn btn-primary-custom d-block mx-auto mt-4" [disabled]="groupForm.invalid">
+        Générer les groupes
+      </button>
+    </form>
 
     <div *ngIf="errorMessage" class="text-danger mt-3 text-center fw-bold">{{ errorMessage }}</div>
 
@@ -38,7 +43,10 @@
       <div *ngFor="let group of groups" class="mb-3">
         <h3>{{ group.name }}</h3>
         <ul>
-          <li *ngFor="let person of group.persons">{{ person.lastName }} ({{ person.age }} ans)</li>
+          <li *ngFor="let person of group.persons">
+            {{ person.lastName }} ({{ person.age }} ans)
+            <span *ngIf="person.isFormerDwwm">- Ancien DWWM</span>
+          </li>
         </ul>
       </div>
     </div>

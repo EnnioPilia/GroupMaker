@@ -11,16 +11,19 @@
  }
 
  .bg-list-header {
-     background-color: #f1d7c3;
+     background-color: #ebd2c2;
      border: 1.5px solid #c29b7f;
      color: #3a2a20;
      border-radius: 0.75rem;
      max-width: 600px;
      width: 100%;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
      padding: 2rem;
  }
 
+.form-check-input{
+background-color: #ddb393
+}
  h2 {
      color: #5e3b2c;
      font-size: 2rem;
@@ -94,4 +97,5 @@
 
  .form-check-input {
      border-color: #c7936b;
+
  }
