@@ -3,6 +3,7 @@ import { ListService, List } from '../../core/list.services';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Person } from '../../core/models/person.model';
 
 @Component({
   selector: 'app-lists',
@@ -13,14 +14,13 @@ import { FormsModule } from '@angular/forms';
 })
 export class ListsComponent implements OnInit {
 
-  // Listes existantes
   lists: List[] = [];
   newListName: string = '';
   errorMessage: string = '';
-
-  // Gestion de la sélection et du formulaire de personnes
+  persons: Person[] = [];
   selectedListId: string | null = null;
   isEditMode: boolean = false;
+
   formPerson: any = {
     lastName: '',
     gender: '',
@@ -30,15 +30,15 @@ export class ListsComponent implements OnInit {
     profile: '',
     age: null,
   };
-  persons: any[] = [];
 
-  constructor(private listService: ListService, private router: Router) {}
+
+  constructor(private listService: ListService, private router: Router) { }
 
   ngOnInit() {
     this.loadLists();
   }
 
-  // Chargement des listes
+  // Chargement des listes depuis le service
   loadLists() {
     this.lists = this.listService.getLists();
   }
@@ -46,14 +46,12 @@ export class ListsComponent implements OnInit {
   // Création d'une nouvelle liste
   createList() {
     const name = this.newListName.trim();
-
     if (name === "") {
-      this.errorMessage = 'Veuilliez entrer un nom de liste';
+      this.errorMessage = 'Veuillez entrer un nom de liste';
       return;
     }
 
     const success = this.listService.addList(name);
-
     if (!success) {
       this.errorMessage = 'Ce nom de liste existe déjà.';
       return;
@@ -72,45 +70,70 @@ export class ListsComponent implements OnInit {
     }
   }
 
-  // Navigation vers les détails d'une liste
-  goToListDetails(listId: string) {
-    this.router.navigate(['/lists', listId]);
-  }
-
-  // Sélection / désélection d'une liste
-  selectList(id: string) {
-    this.selectedListId = this.selectedListId === id ? null : id;
-  }
-
-  // Soumission du formulaire de personne
-  submitPerson() {
-    if (this.isEditMode) {
-      // Modifier une personne existante (à implémenter selon ID ou index)
+  selectList(id: string | null) {
+    if (this.selectedListId === id) {
+      this.selectedListId = null;
+      this.persons = [];
     } else {
-      this.persons.push({ ...this.formPerson });
+      this.selectedListId = id;
+      const list = this.lists.find(l => l.id === id);
+      this.persons = list ? list.persons : [];
     }
-    this.resetForm();
   }
 
-  // Mise à jour d'une personne existante
+
+  // Soumission du formulaire
+  submitPerson() {
+    if (this.selectedListId) {
+      const selectedList = this.lists.find(l => l.id === this.selectedListId);
+      if (selectedList) {
+        const newPerson = {
+          ...this.formPerson,
+          id: crypto.randomUUID()  // Ajout d’un ID unique
+        };
+
+        selectedList.persons.push(newPerson);
+        this.listService.updateList(selectedList.id, selectedList.name, selectedList.persons);
+
+        this.formPerson = {
+          lastName: '',
+          gender: '',
+          frenchLevel: '',
+          isFormerDwwm: false,
+          technicalLevel: '',
+          profile: '',
+          age: null
+        };
+      }
+    }
+  }
+
+
+deletePerson(personId: string) {
+  if (!this.selectedListId) return;
+  const list = this.lists.find(l => l.id === this.selectedListId);
+  if (!list) return;
+
+  list.persons = list.persons.filter(p => p.id !== personId);
+  this.listService.updateList(list.id, list.name, list.persons);
+  this.persons = list.persons;
+}
+
+
+  // Récupérer la liste actuellement sélectionnée
+  getSelectedList(): List | undefined {
+    return this.lists.find(l => l.id === this.selectedListId!);
+  }
+
+  // Edition d’une personne (à implémenter selon besoin)
   edit(person: any) {
     this.isEditMode = true;
     this.formPerson = { ...person };
   }
 
-  // Suppression d'une personne
-  deletePerson(personId: any) {
-    this.persons = this.persons.filter(p => p.id !== personId);
-  }
-
-  // Annulation du formulaire
+  // Annuler l’édition ou le formulaire
   cancelPersonForm() {
     this.resetForm();
-  }
-
-  // Accès au générateur de groupes
-  goToGroupGenerator() {
-    this.router.navigate(['/group-generator']);
   }
 
   // Réinitialiser le formulaire
@@ -125,5 +148,10 @@ export class ListsComponent implements OnInit {
       age: null,
     };
     this.isEditMode = false;
+  }
+
+  // Navigation vers le générateur de groupes
+  goToGroupGenerator() {
+    this.router.navigate(['/group-generator']);
   }
 }

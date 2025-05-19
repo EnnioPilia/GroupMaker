@@ -117,7 +117,7 @@
                     <tr *ngIf="!persons || persons.length === 0">
                       <td colspan="8" class="text-center text-muted">Aucune personne dans la liste</td>
                     </tr>
-                    <tr *ngFor="let person of persons">
+                    <tr *ngFor="let person of getSelectedList()?.persons">
                       <td class="nom-cell">
                         <div>{{ person.lastName }}</div>
                       </td>
@@ -129,7 +129,7 @@
                       <td>{{ person.age }}</td>
                       <td>
                         <!-- <button class="editBtn" (click)="edit(person)">Modifier</button> -->
-                        <button class="btn btn-sm btn-danger-custom" (click)="deletePerson(person.id)">🗑️</button>
+                        <button class="btn btn-sm btn-danger-custom" (click)="deletePerson( person.id)">🗑️</button>
                       </td>
                     </tr>
                   </tbody>

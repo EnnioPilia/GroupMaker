@@ -1,5 +1,5 @@
 export interface Person {
-  id: number;       // id en number
+  id: string;      
   lastName: string;
   gender: 'masculin' | 'féminin' | 'ne se prononce pas';
   frenchLevel: number;

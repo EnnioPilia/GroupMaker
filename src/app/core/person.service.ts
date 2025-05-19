@@ -1,27 +1,27 @@
 import { Injectable } from '@angular/core';
 import { Person } from './models/person.model';
 
+
 @Injectable({
   providedIn: 'root'
 })
 export class PersonService {
-  // Clé = listId, valeur = tableau des personnes associées à cette liste
-  private personsByList: { [listId: number]: Person[] } = {};
+  private personsByList: { [listId: string]: Person[] } = {};
   private nextId = 1;
 
-  getPersons(listId: number): Person[] {
+  getPersons(listId: string): Person[] {
     return this.personsByList[listId] || [];
   }
 
-  addPerson(listId: number, person: Person) {
-    person.id = this.nextId++;
+  addPerson(listId: string, person: Person) {
+    person.id = crypto.randomUUID();
     if (!this.personsByList[listId]) {
       this.personsByList[listId] = [];
     }
     this.personsByList[listId].push(person);
   }
 
-  updatePerson(listId: number, updated: Person) {
+  updatePerson(listId: string, updated: Person) {
     const list = this.personsByList[listId];
     if (!list) return;
 
@@ -29,11 +29,5 @@ export class PersonService {
     if (index > -1) {
       list[index] = updated;
     }
-  }
-
-  deletePerson(listId: number, personId: number) {
-    if (!this.personsByList[listId]) return;
-
-    this.personsByList[listId] = this.personsByList[listId].filter(p => p.id !== personId);
   }
 }
