@@ -12,17 +12,16 @@
             style="width: 55px; background-color: #bd8e6a; font-weight: 600;" min="1" [(ngModel)]="numberOfGroups" required />
         </div>
 
-        <div class="form-check d-flex align-items-center ms-4 pt-4">
-          <input type="checkbox" id="mixerAncienDwwm" name="mixerAncienDwwm" class="form-check-input"
-            [(ngModel)]="criteria.mixerAncienDwwm" />
-          <label for="mixerAncienDwwm" class="form-check-label ms-3 mb-0">Mixer dwwm</label>
-        </div>
+ <div class="form-check d-flex align-items-center me-3">
+  <input type="checkbox" id="mixerAncienDwwm" [(ngModel)]="criteria.mixerAncienDwwm" class="form-check-input" />
+  <label for="mixerAncienDwwm" class="form-check-label ms-2">Mixer DWWM</label>
+</div>
 
-        <div class="form-check d-flex align-items-center pt-4">
-          <input type="checkbox" id="mixerAge" name="mixerAge" class="form-check-input"
-            [(ngModel)]="criteria.mixerAge" />
-          <label for="mixerAge" class="form-check-label ms-2 mb-0">Mixer âge</label>
-        </div>
+<div class="form-check d-flex align-items-center">
+  <input type="checkbox" id="mixerAge" [(ngModel)]="criteria.mixerAge" class="form-check-input" />
+  <label for="mixerAge" class="form-check-label ms-2">Mixer âge</label>
+</div>
+
       </div>
 
     </div>

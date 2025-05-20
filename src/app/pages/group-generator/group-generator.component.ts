@@ -49,86 +49,11 @@ generateForList(listId: string) {
   let groups: Group[] = [];
 
   if (!this.criteria.mixerAncienDwwm && !this.criteria.mixerAge) {
-    // Pas de critère : mélange simple
-    const shuffled = this.shuffleArray([...list.persons]);
-    groups = Array.from({ length: this.numberOfGroups }, (_, i) => ({
-      id: `group-${i + 1}`,
-      name: `Groupe ${i + 1}`,
-      persons: []
-    }));
-    shuffled.forEach((person, i) => {
-      groups[i % this.numberOfGroups].persons.push(person);
-    });
+    groups = this.generateWithoutCriteria(list.persons);
   } else if (this.criteria.mixerAncienDwwm) {
-    // Mixer ancien DWWM
-    const anciens = list.persons.filter(p => p.isFormerDwwm);
-    const autres = list.persons.filter(p => !p.isFormerDwwm);
-
-    groups = Array.from({ length: this.numberOfGroups }, (_, i) => ({
-      id: `group-${i + 1}`,
-      name: `Groupe ${i + 1}`,
-      persons: []
-    }));
-
-    const shuffledAnciens = this.shuffleArray(anciens);
-    shuffledAnciens.forEach((person, i) => {
-      groups[i % this.numberOfGroups].persons.push(person);
-    });
-
-    if (this.criteria.mixerAge) {
-      const sortedAutres = [...autres].sort((a,b) => b.age - a.age);
-      let groupIndex = 0;
-      let forward = true;
-      sortedAutres.forEach(person => {
-        groups[groupIndex].persons.push(person);
-        if (forward) {
-          groupIndex++;
-          if (groupIndex === this.numberOfGroups) {
-            groupIndex = this.numberOfGroups - 1;
-            forward = false;
-          }
-        } else {
-          groupIndex--;
-          if (groupIndex < 0) {
-            groupIndex = 0;
-            forward = true;
-          }
-        }
-      });
-    } else {
-      const shuffledAutres = this.shuffleArray(autres);
-      shuffledAutres.forEach((person, i) => {
-        groups[i % this.numberOfGroups].persons.push(person);
-      });
-    }
-
+    groups = this.generateByAncienDwwmAndMaybeAge(list.persons);
   } else if (this.criteria.mixerAge) {
-    // Mixer seulement âge
-    const sorted = [...list.persons].sort((a,b) => b.age - a.age);
-    groups = Array.from({ length: this.numberOfGroups }, (_, i) => ({
-      id: `group-${i + 1}`,
-      name: `Groupe ${i + 1}`,
-      persons: []
-    }));
-
-    let groupIndex = 0;
-    let forward = true;
-    sorted.forEach(person => {
-      groups[groupIndex].persons.push(person);
-      if (forward) {
-        groupIndex++;
-        if (groupIndex === this.numberOfGroups) {
-          groupIndex = this.numberOfGroups - 1;
-          forward = false;
-        }
-      } else {
-        groupIndex--;
-        if (groupIndex < 0) {
-          groupIndex = 0;
-          forward = true;
-        }
-      }
-    });
+    groups = this.generateByAgeOnly(list.persons);
   }
 
   if (!groups || groups.length === 0) {
@@ -140,14 +65,111 @@ generateForList(listId: string) {
   }
 }
 
-// N’oublie pas d’ajouter cette méthode shuffle dans ta classe aussi
-shuffleArray(array: any[]) {
-  for (let i = array.length -1; i > 0; i--) {
+// 🔹 Cas 1 : Aucun critère → simple mélange aléatoire
+private generateWithoutCriteria(persons: Person[]): Group[] {
+  const shuffled = this.shuffleArray([...persons]);
+  const groups = this.initEmptyGroups();
+  shuffled.forEach((person, i) => {
+    groups[i % this.numberOfGroups].persons.push(person);
+  });
+  return groups;
+}
+
+// 🔹 Cas 2 : Mixer par ancien DWWM avec ou sans âge
+private generateByAncienDwwmAndMaybeAge(persons: Person[]): Group[] {
+  const anciens = persons.filter(p => p.isFormerDwwm);
+  const autres = persons.filter(p => !p.isFormerDwwm);
+  const groups = this.initEmptyGroups();
+
+  const shuffledAnciens = this.shuffleArray(anciens);
+  shuffledAnciens.forEach((person, i) => {
+    groups[i % this.numberOfGroups].persons.push(person);
+  });
+
+  if (this.criteria.mixerAge) {
+    const sortedAutres = [...autres].sort((a, b) => b.age - a.age);
+    this.zigzagDistribute(sortedAutres, groups);
+  } else {
+    const shuffledAutres = this.shuffleArray(autres);
+    shuffledAutres.forEach((person, i) => {
+      groups[i % this.numberOfGroups].persons.push(person);
+    });
+  }
+
+  return groups;
+}
+
+private generateByAgeOnly(persons: Person[]): Group[] {
+  // Étape 1 : trier par âge (optionnel mais utile)
+const sorted = [...persons].sort((a, b) => a.age - b.age);
+
+  // Étape 2 : regrouper par tranche d’âge pour répartir les âges
+  const ageBuckets: Person[][] = Array.from({ length: this.numberOfGroups }, () => []);
+
+  sorted.forEach((person, index) => {
+    ageBuckets[index % this.numberOfGroups].push(person);
+  });
+
+  // Étape 3 : on mélange chaque bucket pour casser les regroupements "naturels"
+  const shuffled = this.shuffleArray(ageBuckets.flat());
+
+  // Étape 4 : créer les groupes
+  const groups: Group[] = Array.from({ length: this.numberOfGroups }, (_, i) => ({
+    id: `group-${i + 1}`,
+    name: `Groupe ${i + 1}`,
+    persons: []
+  }));
+
+  // Étape 5 : distribution équilibrée des personnes
+  shuffled.forEach((person, index) => {
+    groups[index % this.numberOfGroups].persons.push(person);
+  });
+
+  return groups;
+}
+
+// 🔹 Initialiser des groupes vides
+private initEmptyGroups(): Group[] {
+  return Array.from({ length: this.numberOfGroups }, (_, i) => ({
+    id: `group-${i + 1}`,
+    name: `Groupe ${i + 1}`,
+    persons: []
+  }));
+}
+
+// 🔹 Répartition en zigzag (pour éviter de remplir toujours le même groupe)
+private zigzagDistribute(persons: Person[], groups: Group[]) {
+  let index = 0;
+  let forward = true;
+  for (const person of persons) {
+    groups[index].persons.push(person);
+    if (forward) {
+      index++;
+      if (index === this.numberOfGroups) {
+        index = this.numberOfGroups - 1;
+        forward = false;
+      }
+    } else {
+      index--;
+      if (index < 0) {
+        index = 0;
+        forward = true;
+      }
+    }
+  }
+}
+
+// 🔹 Mélanger un tableau aléatoirement (Fisher-Yates)
+private shuffleArray(array: any[]) {
+  for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [array[i], array[j]] = [array[j], array[i]];
   }
   return array;
 }
+
+
+
 
 
 }
