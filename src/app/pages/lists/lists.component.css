@@ -1,7 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Poiret+One&display=swap");
 
 body {
-   font-family: "Poiret One", sans-serif !important;
+    font-family: "Poiret One", sans-serif !important;
     background-color: #e2c7af;
     color: #3a2a20;
     min-height: 100vh;
@@ -9,7 +9,9 @@ body {
     align-items: center;
     justify-content: center;
     padding: 2rem;
+    font-weight: 600;
 }
+
 
 h2 {
     color: #5e3b2c;
@@ -29,6 +31,8 @@ h2 {
 
 .table-bordered {
     background-color: #f1d7c3;
+    text-align: center;
+
 }
 
 .table-striped>tbody>tr:nth-of-type(even) {
@@ -52,6 +56,7 @@ thead.table-dark {
     background-color: #f4e3d6;
     border: 1.5px solid #c29b7f;
     color: #3a2a20;
+
 }
 
 .btn-primary-custom {
@@ -99,8 +104,9 @@ thead.table-dark {
 
 .form-check-input {
     border-color: #6e4b3a;
-    background-color: #ecd1c2 !important;
+    background-color: #dcb49e !important;
 }
+
 
 strong {
     font-size: 2rem;
@@ -115,6 +121,7 @@ strong {
 table.table-bordered td,
 table.table-bordered th {
     border: 1.5px solid #6e4b3a !important;
+
 }
 
 .nom-cell {
@@ -144,6 +151,13 @@ table.table {
 }
 
 .btnSupp button:hover {
-  transform: scale(1.5);
+    transform: scale(1.5);
 
+}
+
+.btn-primary-custom,
+.btn-secondary-custom,
+.btn-danger-custom {
+    font-weight: 700;
+    /* gras */
 }

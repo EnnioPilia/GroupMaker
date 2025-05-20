@@ -16,9 +16,7 @@ import { Person } from '../../core/models/person.model';
 export class GroupGeneratorComponent {
   lists: List[] = [];
   selectedListId: string | null = null;
-  persons: Person[] = [];
   numberOfGroups = 2;
-  groups: Group[] | null = null;
   errorMessage = '';
 
   criteria = {
@@ -33,26 +31,18 @@ export class GroupGeneratorComponent {
     this.lists = this.listService.getLists();
   }
 
-  loadPersons() {
-    if (this.selectedListId) {
-      const selectedList = this.lists.find(l => l.id === this.selectedListId);
-      this.persons = selectedList ? selectedList.persons : [];
-    } else {
-      this.persons = [];
-    }
-  }
-
   clearGroups() {
-    this.groups = null;
+    this.lists.forEach(list => list.generatedGroups = []);
     this.errorMessage = '';
   }
 
-  generate() {
-    const list = this.lists.find(l => l.id === this.selectedListId);
+  generateForList(listId: string) {
+    const list = this.lists.find(l => l.id === listId);
+    if (!list) return;
 
-    if (!list || !list.persons || list.persons.length < this.numberOfGroups) {
+    if (!list.persons || list.persons.length < this.numberOfGroups) {
       this.errorMessage = "Pas assez de personnes pour former autant de groupes.";
-      this.groups = [];
+      list.generatedGroups = [];
       return;
     }
 
@@ -60,20 +50,14 @@ export class GroupGeneratorComponent {
 
     if (!result || result.length === 0) {
       this.errorMessage = "Impossible de générer des groupes différents. Essayez de modifier les critères.";
-      this.groups = [];
+      list.generatedGroups = [];
     } else {
-      this.groups = result.map((group, i) => ({
+      list.generatedGroups = result.map((group, i) => ({
         ...group,
         name: `Groupe ${i + 1}`,
         listName: list.name
       }));
       this.errorMessage = '';
     }
-  }
-
-  generateForList(listId: string) {
-    this.selectedListId = listId;
-    this.loadPersons();
-    this.generate();
   }
 }

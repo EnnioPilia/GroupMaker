@@ -89,7 +89,7 @@
                     name="age" min="1" max="99" required />
                 </div>
                 <div class="d-flex gap-2">
-                  <button type="submit" class="btn btn-primary-custom">{{ isEditMode ? 'Modifier' : 'Ajouter'}}</button>
+                  <button type="submit" class="btn btn-primary-custom">{{ isEditMode ? 'Modifier' : 'Ajouter la personne'}}</button>
                   <button *ngIf="isEditMode" type="button" class="btn btn-secondary-custom"
                     (click)="cancelPersonForm()">Annuler</button>
                 </div>
@@ -104,9 +104,9 @@
                     <tr>
                       <th>Nom</th>
                       <th>Genre</th>
-                      <th>Fra</th>
-                      <th>DWWM</th>
-                      <th>Tech</th>
+                      <th>Francais</th>
+                      <th>dwwm</th>
+                      <th>Technique</th>
                       <th>Profil</th>
                       <th>Âge</th>
                       <th></th>

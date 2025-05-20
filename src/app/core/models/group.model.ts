@@ -7,3 +7,11 @@ export interface Group {
   listName?: string; // <-- ajoute cette ligne
 
 }
+
+
+export interface List {
+  id: string;
+  name: string;
+  persons: Person[];
+  generatedGroups?: Group[];  // <-- ajoute cette propriété
+}

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Person } from './models/person.model';  // chemin à ajuster selon ton arborescence
-
+import { Group } from './models/group.model';
 
 
 
@@ -10,6 +10,8 @@ export interface List {
   name: string;
   persons: Person[];
   draws: number;
+  generatedGroups?: Group[];  // <-- ajoute cette propriété
+  
 }
 
 @Injectable({
