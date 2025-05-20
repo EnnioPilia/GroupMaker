@@ -5,17 +5,17 @@
       style="background-color: #ddb393; border: 2px solid #c29b7f; border-radius: 0.75rem;">
       <h2 class="text-center mb-0">Générateur de groupes</h2>
 
-      <div class="d-flex align-items-center gap-4 mb-3" style="max-width: 600px;">
-        <div style="min-width: 150px;">
-          <label for="numberOfGroups" class="form-label">Nombre :</label>
-          <input style="width: 60px; background-color: #ddb393;" type="number" id="numberOfGroups" name="numberOfGroups"
-            class="form-control form-control-custom" min="1" [(ngModel)]="numberOfGroups" required />
+      <div class="d-flex align-items-center  gap-4 mb-3" style="max-width: 600px;">
+        <div class="d-flex align-items-center mt-4" style="gap: 10px;">
+          <label for="numberOfGroups" class="form-label mb-0">Nombre :</label>
+          <input type="number" id="numberOfGroups" name="numberOfGroups" class="form-control form-control-custom"
+            style="width: 55px; background-color: #bd8e6a; font-weight: 600;" min="1" [(ngModel)]="numberOfGroups" required />
         </div>
 
-        <div class="form-check d-flex align-items-center me-3 pt-4">
+        <div class="form-check d-flex align-items-center ms-4 pt-4">
           <input type="checkbox" id="mixerAncienDwwm" name="mixerAncienDwwm" class="form-check-input"
             [(ngModel)]="criteria.mixerAncienDwwm" />
-          <label for="mixerAncienDwwm" class="form-check-label ms-2 mb-0">Mixer DWWM</label>
+          <label for="mixerAncienDwwm" class="form-check-label ms-3 mb-0">Mixer dwwm</label>
         </div>
 
         <div class="form-check d-flex align-items-center pt-4">
@@ -43,7 +43,7 @@
           <div *ngFor="let group of list.generatedGroups" class="group-card mb-3">
             <h3>{{ group.name }}</h3>
             <ul>
-              <li *ngFor="let person of group.persons">
+              <li *ngFor="let person of group.persons" style="font-weight: 600;">
                 {{ person.lastName }} ({{ person.age }} ans)
                 <span *ngIf="person.isFormerDwwm">- Ancien DWWM</span>
               </li>

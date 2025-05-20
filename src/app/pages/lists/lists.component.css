@@ -107,7 +107,6 @@ thead.table-dark {
     background-color: #dcb49e !important;
 }
 
-
 strong {
     font-size: 2rem;
 }
@@ -159,5 +158,4 @@ table.table {
 .btn-secondary-custom,
 .btn-danger-custom {
     font-weight: 700;
-    /* gras */
 }

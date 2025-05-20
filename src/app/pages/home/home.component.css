@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Shadows+Into+Light&display=swap");
+
 @import url("https://fonts.googleapis.com/css2?family=Poiret+One&display=swap");
 
 body,
@@ -6,19 +6,16 @@ html {
   margin: 0;
   padding: 0;
   height: 100%;
-        font-family: "Poiret One", sans-serif!important;
-  /* font-family: "Poiret One", sans-serif; */
+  font-family: "Poiret One", sans-serif !important;
   background-color: #e6ba94;
   color: #3a2a20;
   overflow: hidden;
 }
 
 h1 {
-  /* font-family: "Shadows Into Light", cursive; */
   font-family: "Poiret One", sans-serif;
   font-size: 9rem;
   color: #5e3b2c;
-
 }
 
 .content-area {
@@ -40,6 +37,8 @@ h1 {
   font-weight: bold;
   padding: 0.4rem 1rem;
   border-radius: 0.375rem;
+    border: solid  1px #5e3b2c;
+
 }
 
 .btn-primary-custom:hover {

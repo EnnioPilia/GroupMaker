@@ -2,7 +2,7 @@
 
 body {
   font-family: "Poiret One", sans-serif !important;
-  background-color: #e2c7af;
+  background-color: #9e8167;
   color: #3a2a20;
   min-height: 100vh;
   display: flex;
@@ -10,6 +10,7 @@ body {
   justify-content: center;
   padding: 2rem;
   margin: 0;
+  font-weight: 500;
 }
 
 .bg-list-header {
@@ -24,8 +25,8 @@ body {
 }
 
 .form-check-input {
-  background-color: #ddb393;
-  border-color: #c7936b;
+  background-color: #bd8e6a;
+  border-color: #785235;
 }
 
 .form-check-input:checked {
@@ -103,6 +104,7 @@ label {
 
 ul {
   padding-left: 1.2rem;
+  font-weight: 500;
 }
 
 .group-card {
@@ -147,3 +149,4 @@ ul {
   text-align: center;
   text-align-last: center;
 }
+
