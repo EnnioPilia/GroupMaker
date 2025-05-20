@@ -12,6 +12,9 @@ export class PersonService {
   getPersons(listId: string): Person[] {
     return this.personsByList[listId] || [];
   }
+addPersonsToList(listId: string, persons: Person[]) {
+  this.personsByList[listId] = persons;
+}
 
   addPerson(listId: string, person: Person) {
     person.id = crypto.randomUUID();

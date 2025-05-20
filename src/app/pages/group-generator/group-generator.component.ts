@@ -41,25 +41,39 @@ export class GroupGeneratorComponent {
       this.persons = [];
     }
   }
-clearGroups() {
-  this.groups = null;
-  this.errorMessage = '';
-}
 
-generate() {
-  const result = this.groupGenerator.generateGroups(this.persons, this.numberOfGroups, this.criteria);
-  if (result) {
-    const list = this.lists.find(l => l.id === this.selectedListId);
-    const listName = list ? list.name : '';
-
-    this.groups = result.map(group => ({
-      ...group,
-      listName: listName
-    }));
-
+  clearGroups() {
+    this.groups = null;
     this.errorMessage = '';
-  } else {
-    this.errorMessage = 'Impossible de générer des groupes différents. Essayez de modifier les critères.';
   }
-}
+
+  generate() {
+    const list = this.lists.find(l => l.id === this.selectedListId);
+
+    if (!list || !list.persons || list.persons.length < this.numberOfGroups) {
+      this.errorMessage = "Pas assez de personnes pour former autant de groupes.";
+      this.groups = [];
+      return;
+    }
+
+    const result = this.groupGenerator.generateGroups(list.persons, this.numberOfGroups, this.criteria);
+
+    if (!result || result.length === 0) {
+      this.errorMessage = "Impossible de générer des groupes différents. Essayez de modifier les critères.";
+      this.groups = [];
+    } else {
+      this.groups = result.map((group, i) => ({
+        ...group,
+        name: `Groupe ${i + 1}`,
+        listName: list.name
+      }));
+      this.errorMessage = '';
+    }
+  }
+
+  generateForList(listId: string) {
+    this.selectedListId = listId;
+    this.loadPersons();
+    this.generate();
+  }
 }

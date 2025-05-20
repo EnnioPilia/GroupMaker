@@ -1,5 +1,7 @@
+@import url("https://fonts.googleapis.com/css2?family=Poiret+One&display=swap");
+
 body {
-    font-family: 'Reggae One', cursive !important;
+   font-family: "Poiret One", sans-serif !important;
     background-color: #e2c7af;
     color: #3a2a20;
     min-height: 100vh;
