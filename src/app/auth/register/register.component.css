@@ -4,7 +4,7 @@ body {
   font-family: "Poiret One", sans-serif !important;
   background-color: #e2c7af;
   color: #3a2a20;
-  max-height: 100vh;
+  min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
