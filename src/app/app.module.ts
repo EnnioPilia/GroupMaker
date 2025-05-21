@@ -9,10 +9,14 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './auth/login/login.component';
 import { ListsComponent } from './pages/lists/lists.component';
 import { HomeComponent } from './pages/home/home.component';
+import { RegisterComponent } from './auth/register/register.component';
+import { ReactiveFormsModule } from '@angular/forms';
+
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' }, // 'full' ici doit être littéral, pas une variable
   { path: 'login', component: LoginComponent },
+  { path: 'register', component: RegisterComponent },
   { path: 'lists', component: ListsComponent },
   { path: 'group-generator', component: GroupGeneratorComponent }, // <-- ajoute ça
 ];
@@ -25,14 +29,16 @@ const routes: Routes = [
     ListsComponent,
     GroupGeneratorComponent,
     HomeComponent,
-    ],
-    
-imports: [
-  BrowserModule,  // contient CommonModule, mais parfois il faut expliciter si problème
-  CommonModule,   // <-- ajoute-le explicitement
-  FormsModule,
-  RouterModule.forRoot(routes),
-],
+    RegisterComponent
+  ],
+
+  imports: [
+    BrowserModule,  // contient CommonModule, mais parfois il faut expliciter si problème
+    CommonModule,   // <-- ajoute-le explicitement
+    FormsModule,
+    ReactiveFormsModule,
+    RouterModule.forRoot(routes),
+  ],
   providers: [],
   bootstrap: [AppComponent]
 })

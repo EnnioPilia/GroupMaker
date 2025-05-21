@@ -5,6 +5,7 @@ import { ListsComponent } from './pages/lists/lists.component';
 import { PersonListComponent } from './pages/persons/person-list.component';
 import { GroupPersonsComponent } from './pages/group-persons/group-persons.component';
 import { GroupGeneratorComponent } from './pages/group-generator/group-generator.component';
+import { RegisterComponent } from './auth/register/register.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -13,6 +14,7 @@ export const routes: Routes = [
   { path: 'lists/:listId/persons', component: PersonListComponent },
   { path: 'group-person', component: GroupPersonsComponent },
   { path: 'group-generator', component: GroupGeneratorComponent },
-  { path: '**', redirectTo: '', pathMatch: 'full' } ,
-  { path: 'home', component: HomeComponent }
+  { path: 'register', component: RegisterComponent },
+  { path: 'home', component: HomeComponent },
+  { path: '**', redirectTo: '', pathMatch: 'full' },
 ];

@@ -1,0 +1,79 @@
+<body style="background-color: #e2c7af;">
+  <div class="card mx-auto mt-1  bg-list-header p-4"
+    style="max-width: 500px; border: 2px solid #c29b7f; border-radius: 0.75rem; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);">
+
+    <h2 class="text-center mb-1" style="color: #5e3b2c;">Inscription</h2>
+
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" novalidate>
+      
+      <div class="mb-3">
+        <label for="name" class="form-label">Nom :</label>
+        <input id="name" formControlName="name" class="form-control form-control-custom" />
+
+        @if (registerForm.get('name')?.touched && registerForm.get('name')?.invalid) {
+        <div class="text-danger mt-1">
+          @if (registerForm.get('name')?.errors?.['required']) {
+          <small>Le nom est requis.</small>
+          }
+          @if (registerForm.get('name')?.errors?.['minlength']) {
+          <small>Au moins 2 caractères.</small>
+          }
+        </div>
+        }
+      </div>
+
+      <div class="mb-3">
+        <label for="email" class="form-label">Email :</label>
+        <input id="email" formControlName="email" class="form-control form-control-custom" />
+
+        @if (registerForm.get('email')?.touched && registerForm.get('email')?.invalid) {
+        <div class="text-danger mt-1">
+          @if (registerForm.get('email')?.errors?.['required']) {
+          <small>L'email est requis.</small>
+          }
+          @if (registerForm.get('email')?.errors?.['minlength']) {
+          <small>Format d’email invalide.</small>
+          }
+        </div>
+        }
+      </div>
+
+      <div class="mb-3">
+        <label for="age" class="form-label">Âge :</label>
+        <input id="age" type="number" formControlName="age" class="form-control form-control-custom" />
+
+        @if (registerForm.get('age')?.touched && registerForm.get('age')?.invalid) {
+        <div class="text-danger mt-1">
+          @if (registerForm.get('age')?.errors?.['required']) {
+          <small>L'age est requis.</small>
+          }
+          @if (registerForm.get('age')?.errors?.['min']) {
+          <small>Âge minimum requis : 18 ans.</small>
+          }
+        </div>
+        }
+      </div>
+
+      <div class="mb-3">
+        <label for="passWord" class="form-label">Mot de passe :</label>
+        <input id="passWord" formControlName="passWord" class="form-control form-control-custom" />
+
+        @if (registerForm.get('passWord')?.touched && registerForm.get('passWord')?.invalid) {
+        <div class="text-danger mt-1">
+          @if (registerForm.get('passWord')?.errors?.['required']) {
+          <small>Le mot de passe est requis.</small>
+          }
+          @if (registerForm.get('passWord')?.errors?.['minlength']) {
+          <small>Au moins 2 caractères.</small>
+          }
+        </div>
+        }
+      </div>
+
+      <button type="submit" class="btn btn-primary-custom w-100 mt-1" [disabled]="registerForm.invalid">
+        S'inscrire
+      </button>
+
+    </form>
+  </div>
+</body>
