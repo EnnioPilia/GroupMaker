@@ -31,7 +31,7 @@
           @if (registerForm.get('email')?.errors?.['required']) {
           <small>L'email est requis.</small>
           }
-          @if (registerForm.get('email')?.errors?.['minlength']) {
+          @if (registerForm.get('email')?.errors?.['email']) {
           <small>Format d’email invalide.</small>
           }
         </div>
