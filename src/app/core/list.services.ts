@@ -11,6 +11,9 @@ export interface List {
   persons: Person[];
   draws: number;
   generatedGroups?: Group[];  // <-- ajoute cette propriété
+    groupsSaved?: boolean;
+  groupNames?: string[];
+  showSavedGroups?: boolean;
   
 }
 

@@ -29,7 +29,13 @@ export class GroupGeneratorComponent {
     private listService: ListService
   ) {
     this.lists = this.listService.getLists();
-  }
+
+  this.lists.forEach(list => {
+    if (!list.groupNames) {
+      list.groupNames = [];
+    }
+  });
+}
 
   clearGroups() {
     this.lists.forEach(list => list.generatedGroups = []);
@@ -99,34 +105,34 @@ export class GroupGeneratorComponent {
     return groups;
   }
 
- private generateByAgeOnly(persons: Person[]): Group[] {
-  // Étape 1 : trier par âge
-  const sorted = [...persons].sort((a, b) => a.age - b.age);
+  private generateByAgeOnly(persons: Person[]): Group[] {
+    // Étape 1 : trier par âge
+    const sorted = [...persons].sort((a, b) => a.age - b.age);
 
-  // Étape 2 : regrouper par tranche d’âge pour répartir les âges
-  const ageBuckets: Person[][] = Array.from({ length: this.numberOfGroups }, () => []);
+    // Étape 2 : regrouper par tranche d’âge pour répartir les âges
+    const ageBuckets: Person[][] = Array.from({ length: this.numberOfGroups }, () => []);
 
-  sorted.forEach((person, index) => {
-    ageBuckets[index % this.numberOfGroups].push(person);
-  });
+    sorted.forEach((person, index) => {
+      ageBuckets[index % this.numberOfGroups].push(person);
+    });
 
-  // Étape 3 : on mélange chaque bucket pour casser les regroupements "naturels"
-  const shuffled = this.shuffleArray(ageBuckets.flat());
+    // Étape 3 : on mélange chaque bucket pour casser les regroupements "naturels"
+    const shuffled = this.shuffleArray(ageBuckets.flat());
 
-  // Étape 4 : créer les groupes
-  const groups: Group[] = Array.from({ length: this.numberOfGroups }, (_, i) => ({
-    id: `group-${i + 1}`,
-    name: `Groupe ${i + 1}`,
-    persons: []
-  }));
+    // Étape 4 : créer les groupes
+    const groups: Group[] = Array.from({ length: this.numberOfGroups }, (_, i) => ({
+      id: `group-${i + 1}`,
+      name: `Groupe ${i + 1}`,
+      persons: []
+    }));
 
-  // Étape 5 : distribution équilibrée des personnes
-  shuffled.forEach((person, index) => {
-    groups[index % this.numberOfGroups].persons.push(person);
-  });
+    // Étape 5 : distribution équilibrée des personnes
+    shuffled.forEach((person, index) => {
+      groups[index % this.numberOfGroups].persons.push(person);
+    });
 
-  return groups;
-}
+    return groups;
+  }
 
 
   // 🔹 Créer des groupes vides
@@ -165,4 +171,29 @@ export class GroupGeneratorComponent {
     }
     return array;
   }
+
+saveGroups(list: List) {
+  console.log('saveGroups called for list:', list);
+  if (!list) return;
+  list.groupsSaved = true;
+  if (!list.groupNames) {
+    list.groupNames = list.generatedGroups?.map(g => g.name) || [];
+  }
+  list.showSavedGroups = true;
+}
+
+
+updateGroupNames(list: List) {
+  if (!list.generatedGroups || !list.groupNames) return;
+
+  list.generatedGroups.forEach((group, i) => {
+    if (list.groupNames && list.groupNames[i]) {
+      group.name = list.groupNames[i];
+    }
+  });
+}
+
+toggleSavedGroupsVisibility(list: List) {
+  list.showSavedGroups = !list.showSavedGroups;
+}
 }
