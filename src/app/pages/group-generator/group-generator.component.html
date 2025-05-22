@@ -5,35 +5,37 @@
       style="background-color: #ddb393; border: 2px solid #c29b7f; border-radius: 0.75rem;">
       <h2 class="text-center mb-0">Générateur de groupes</h2>
 
-      <div class="d-flex align-items-center  gap-4 mb-3" style="max-width: 600px;">
-        <div class="d-flex align-items-center mt-4" style="gap: 10px;">
+      <div class="d-flex align-items-center gap-4 mb-3" style="max-width: 600px">
+        <div class="d-flex align-items-center mt-4" style="gap: 10px">
           <label for="numberOfGroups" class="form-label mb-0">Nombre :</label>
           <input type="number" id="numberOfGroups" name="numberOfGroups" class="form-control form-control-custom"
-            style="width: 55px; background-color: #bd8e6a; font-weight: 600;" min="1" [(ngModel)]="numberOfGroups"
+            style="width: 55px; background-color: #bd8e6a; font-weight: 600" min="1" [(ngModel)]="numberOfGroups"
             required />
         </div>
 
-        <div class="form-check d-flex align-items-center me-3">
+        <div class="form-check d-flex align-items-center me-3 ms-4 mt-3">
           <input type="checkbox" id="mixerAncienDwwm" [(ngModel)]="criteria.mixerAncienDwwm" class="form-check-input" />
-          <label for="mixerAncienDwwm" class="form-check-label ms-2">Mixer DWWM</label>
+          <label for="mixerAncienDwwm" class="form-check-label ms-2">Mixer dwwm</label>
         </div>
 
-        <div class="form-check d-flex align-items-center">
+        <div class="form-check d-flex align-items-center mt-3">
           <input type="checkbox" id="mixerAge" [(ngModel)]="criteria.mixerAge" class="form-check-input" />
           <label for="mixerAge" class="form-check-label ms-2">Mixer âge</label>
         </div>
-
       </div>
-
     </div>
 
-    <div *ngFor="let list of lists" class="mb-4" style="max-width: 600px;">
-      <div class="p-3 mb-3" style="background-color: #ddb393; border: 1px solid #7a5a49; border-radius: 0.375rem;">
+    <div *ngFor="let list of lists" class="mb-4" style="max-width: 600px">
+      <div class="p-3 mb-3" style="
+      background-color: #ddb393;
+      border: 1px solid #7a5a49;
+      border-radius: 0.375rem;
+    ">
         <h4 class="mb-3">{{ list.name }}</h4>
 
         <form #groupForm="ngForm" (ngSubmit)="generateForList(list.id)" novalidate>
           <div class="d-flex justify-content-center">
-            <button type="submit" class="btn btn-primary-custom" style="width: 45%;" [disabled]="groupForm.invalid">
+            <button type="submit" class="btn btn-primary-custom" style="width: 45%" [disabled]="groupForm.invalid">
               Générer les groupes
             </button>
           </div>
@@ -41,7 +43,7 @@
 
         <div *ngIf="list.generatedGroups && list.generatedGroups.length > 0" class="mt-3">
           <div *ngFor="let group of list.generatedGroups" class="group-card mb-3">
-            <h3>{{ group.name }} </h3>
+            <h3>{{ group.name }}</h3>
             <ul>
               <li *ngFor="let person of group.persons" class="card mb-2 p-3 d-flex align-items-flex-start  "
                 style="font-weight: 600; cursor: grab; background-color: #dcb49e; border: 1px solid #7a5a49; border-radius: 10px; color: #3a2a20;">

@@ -86,7 +86,7 @@
                 </div>
                 <div class="mb-3">
                   <label class="form-label fw-semibold text-brown">Âge :</label>
-                  <input type="number" class="form-control form-control-custom w-25"  [(ngModel)]="formPerson.age"
+                  <input type="number" class="form-control form-control-custom w-25" [(ngModel)]="formPerson.age"
                     name="age" min="1" max="99" required />
                 </div>
                 <div class="d-flex gap-2">
@@ -129,10 +129,11 @@
                       <td>{{ person.technicalLevel }}</td>
                       <td>{{ person.profile }}</td>
                       <td>{{ person.age }}</td>
-                      <td class="btnSupp" style="background-color:  red;">
-                        <div><button (click)="deletePerson(person.id)"
-                            style="background-color: red; border: none; ">🗑️</button></div>
+                      <td class="btnSupp" style="background-color: red;">
+                        <button (click)="deletePerson(person.id)"
+                          style="background-color: red; border: none; color: white; font-weight: bold; font-size: 1.2rem; cursor: pointer;">✖</button>
                       </td>
+
                     </tr>
                   </tbody>
                 </table>

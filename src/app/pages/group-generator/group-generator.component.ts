@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { GroupGeneratorService } from '../../core/group-generator.service';
 import { ListService, List } from '../../core/list.services';
 import { Group } from '../../core/models/group.model';
 import { Person } from '../../core/models/person.model';
+import { GroupHistoryComponent } from '../group-history/group-history.component';
 import { GroupSaveComponent } from '../group-save/group-save.component';
 
 @Component({
@@ -12,9 +13,12 @@ import { GroupSaveComponent } from '../group-save/group-save.component';
   standalone: true,
   templateUrl: './group-generator.component.html',
   styleUrls: ['./group-generator.component.css'],
+  imports: [CommonModule, FormsModule, GroupHistoryComponent],
   imports: [CommonModule, FormsModule,GroupSaveComponent]
 })
-export class GroupGeneratorComponent {
+export class GroupGeneratorComponent implements OnInit {
+  @ViewChild(GroupHistoryComponent) groupHistoryComponent?: GroupHistoryComponent;
+
   lists: List[] = [];
   selectedListId: string | null = null;
   numberOfGroups = 2;
@@ -22,57 +26,102 @@ export class GroupGeneratorComponent {
 
   criteria = {
     mixerAncienDwwm: false,
-    mixerAge: false
+    mixerAge: false,
   };
 
   constructor(
     private groupGenerator: GroupGeneratorService,
     private listService: ListService
-  ) {
+  ) {}
+
+  ngOnInit() {
+    // Charger les listes
     this.lists = this.listService.getLists();
 
-  this.lists.forEach(list => {
-    if (!list.groupNames) {
-      list.groupNames = [];
-    }
-  });
-}
-
-  clearGroups() {
-    this.lists.forEach(list => list.generatedGroups = []);
-    this.errorMessage = '';
+    // Initialisation des listes (ajout des propriétés nécessaires)
+    this.lists.forEach((list) => {
+      if (!list.groupNames) {
+        list.groupNames = [];
+      }
+      // Ne pas afficher les groupes générés à la réouverture
+      list.generatedGroups = [];
+      // Toujours afficher l'historique s'il existe dans le localStorage
+      const history = localStorage.getItem(`groups-${list.id}`);
+      list.groupsSaved = history !== null && JSON.parse(history).length > 0;
+      list.showSavedGroups = list.groupsSaved;
+    });
   }
 
+deleteSavedGroups(listId: string) {
+  // Supprime l'historique dans localStorage
+  localStorage.removeItem(`groups-${listId}`);
+
+  // Trouve la liste concernée
+  const list = this.lists.find((l) => l.id === listId);
+  if (list) {
+    // Vide les groupes générés et met à jour les flags
+    list.generatedGroups = [];
+    list.groupsSaved = false;
+    list.showSavedGroups = false;
+  }
+
+  // Recharge l'historique affiché
+  this.groupHistoryComponent?.reload();
+}
+
+
   generateForList(listId: string) {
-    const list = this.lists.find(l => l.id === listId);
+    this.selectedListId = listId;
+    const list = this.lists.find((l) => l.id === listId);
     if (!list) return;
 
     if (!list.persons || list.persons.length < this.numberOfGroups) {
-      this.errorMessage = "Pas assez de personnes pour former autant de groupes.";
+      this.errorMessage = 'Pas assez de personnes pour former autant de groupes.';
       list.generatedGroups = [];
       return;
     }
 
     let groups: Group[] = [];
 
-    if (!this.criteria.mixerAncienDwwm && !this.criteria.mixerAge) {
+    // Forcer la liste 2 à ne pas utiliser les critères
+    if (listId === 'id_de_la_liste_2') {
       groups = this.generateWithoutCriteria(list.persons);
-    } else if (this.criteria.mixerAncienDwwm) {
-      groups = this.generateByAncienDwwmAndMaybeAge(list.persons);
-    } else if (this.criteria.mixerAge) {
-      groups = this.generateByAgeOnly(list.persons);
+    } else {
+      if (!this.criteria.mixerAncienDwwm && !this.criteria.mixerAge) {
+        groups = this.generateWithoutCriteria(list.persons);
+      } else if (this.criteria.mixerAncienDwwm) {
+        groups = this.generateByAncienDwwmAndMaybeAge(list.persons);
+      } else if (this.criteria.mixerAge) {
+        groups = this.generateByAgeOnly(list.persons);
+      }
     }
 
     if (!groups || groups.length === 0) {
-      this.errorMessage = "Impossible de générer des groupes différents. Essayez de modifier les critères.";
+      this.errorMessage = 'Impossible de générer des groupes différents. Essayez de modifier les critères.';
       list.generatedGroups = [];
-    } else {
-      list.generatedGroups = groups;
-      this.errorMessage = '';
+      return;
     }
+
+    // Option 1 : afficher temporairement les groupes générés (1 sec), puis vider
+    list.generatedGroups = groups;
+    list.groupNames = groups.map((g) => g.name);
+    list.groupsSaved = true;
+    list.showSavedGroups = true;
+    this.errorMessage = '';
+
+    // Sauvegarder dans localStorage (historique)
+    const existingHistory = JSON.parse(localStorage.getItem(`groups-${listId}`) || '[]');
+    existingHistory.push(groups);
+    localStorage.setItem(`groups-${listId}`, JSON.stringify(existingHistory));
+
+    this.groupHistoryComponent?.reload();
+
+    // Vider generatedGroups après 1 seconde pour ne pas les garder dans le générateur
+
   }
 
-  // 🔹 Cas 1 : Aucun critère → simple mélange aléatoire
+  // --- Méthodes de génération ---
+
   private generateWithoutCriteria(persons: Person[]): Group[] {
     const shuffled = this.shuffleArray([...persons]);
     const groups = this.initEmptyGroups();
@@ -80,18 +129,15 @@ export class GroupGeneratorComponent {
     return groups;
   }
 
-  // 🔹 Cas 2 : Mixer DWWM, peut-être avec l'âge
   private generateByAncienDwwmAndMaybeAge(persons: Person[]): Group[] {
-    const anciens = persons.filter(p => p.isFormerDwwm);
-    const autres = persons.filter(p => !p.isFormerDwwm);
+    const anciens = persons.filter((p) => p.isFormerDwwm);
+    const autres = persons.filter((p) => !p.isFormerDwwm);
 
     const groups = this.initEmptyGroups();
 
-    // Répartition des anciens DWWM
     const shuffledAnciens = this.shuffleArray(anciens);
     this.zigzagDistribute(shuffledAnciens, groups);
 
-    // Trier les autres par âge
     const sortedAutres = [...autres].sort((a, b) => a.age - b.age);
     const offset = Math.floor(Math.random() * this.numberOfGroups);
 
@@ -100,34 +146,34 @@ export class GroupGeneratorComponent {
       groups[groupIndex].persons.push(person);
     });
 
-    // Tri par âge dans chaque groupe (optionnel)
-    groups.forEach(group => group.persons.sort((a, b) => a.age - b.age));
+    groups.forEach((group) => group.persons.sort((a, b) => a.age - b.age));
 
     return groups;
   }
 
   private generateByAgeOnly(persons: Person[]): Group[] {
-    // Étape 1 : trier par âge
     const sorted = [...persons].sort((a, b) => a.age - b.age);
 
-    // Étape 2 : regrouper par tranche d’âge pour répartir les âges
-    const ageBuckets: Person[][] = Array.from({ length: this.numberOfGroups }, () => []);
+    const ageBuckets: Person[][] = Array.from(
+      { length: this.numberOfGroups },
+      () => []
+    );
 
     sorted.forEach((person, index) => {
       ageBuckets[index % this.numberOfGroups].push(person);
     });
 
-    // Étape 3 : on mélange chaque bucket pour casser les regroupements "naturels"
     const shuffled = this.shuffleArray(ageBuckets.flat());
 
-    // Étape 4 : créer les groupes
-    const groups: Group[] = Array.from({ length: this.numberOfGroups }, (_, i) => ({
-      id: `group-${i + 1}`,
-      name: `Groupe ${i + 1}`,
-      persons: []
-    }));
+    const groups: Group[] = Array.from(
+      { length: this.numberOfGroups },
+      (_, i) => ({
+        id: `group-${i + 1}`,
+        name: `Groupe ${i + 1}`,
+        persons: [],
+      })
+    );
 
-    // Étape 5 : distribution équilibrée des personnes
     shuffled.forEach((person, index) => {
       groups[index % this.numberOfGroups].persons.push(person);
     });
@@ -135,17 +181,14 @@ export class GroupGeneratorComponent {
     return groups;
   }
 
-
-  // 🔹 Créer des groupes vides
   private initEmptyGroups(): Group[] {
     return Array.from({ length: this.numberOfGroups }, (_, i) => ({
       id: `group-${i + 1}`,
       name: `Groupe ${i + 1}`,
-      persons: []
+      persons: [],
     }));
   }
 
-  // 🔹 Répartition en zigzag (équilibrée et alternée)
   private zigzagDistribute(persons: Person[], groups: Group[]) {
     let index = 0;
     let direction = 1;
@@ -164,13 +207,22 @@ export class GroupGeneratorComponent {
     }
   }
 
-  // 🔹 Mélanger un tableau (Fisher-Yates)
   private shuffleArray<T>(array: T[]): T[] {
     for (let i = array.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [array[i], array[j]] = [array[j], array[i]];
     }
     return array;
+  }
+
+  updateGroupNames(list: List) {
+    if (!list.generatedGroups || !list.groupNames) return;
+
+    list.generatedGroups.forEach((group, i) => {
+      if (list.groupNames && list.groupNames[i]) {
+        group.name = list.groupNames[i];
+      }
+    });
   }
 saveGroups(updatedGroups: Group[]) {
   // Ici tu peux faire ce que tu veux avec les groupes modifiés (ex: sauvegarder dans un service)
@@ -182,4 +234,7 @@ saveGroups(updatedGroups: Group[]) {
   });
 }
 
+  toggleSavedGroupsVisibility(list: List) {
+    list.showSavedGroups = !list.showSavedGroups;
+  }
 }

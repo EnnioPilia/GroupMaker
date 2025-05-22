@@ -5,6 +5,11 @@ import { RouterModule } from '@angular/router';
   selector: 'app-root',
   standalone: true,
   imports: [RouterModule],
-  template: `<router-outlet></router-outlet>`
+  template: `
+    <h1>Hello, {{ title }}</h1>
+    <router-outlet></router-outlet>
+  `
 })
-export class AppComponent {}
+export class AppComponent {
+  title = 'GroupMaker';
+}
