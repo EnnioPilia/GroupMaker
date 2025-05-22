@@ -16,5 +16,7 @@ export const routes: Routes = [
   { path: 'group-generator', component: GroupGeneratorComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'home', component: HomeComponent },
+  {path: 'lists/:listId', component: GroupGeneratorComponent},
+  
   { path: '**', redirectTo: '', pathMatch: 'full' },
 ];

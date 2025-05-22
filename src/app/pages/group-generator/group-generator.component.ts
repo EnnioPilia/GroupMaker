@@ -1,25 +1,25 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { GroupGeneratorService } from '../../core/group-generator.service';
+import { ActivatedRoute } from '@angular/router';
 import { ListService, List } from '../../core/list.services';
 import { Group } from '../../core/models/group.model';
 import { Person } from '../../core/models/person.model';
 import { GroupHistoryComponent } from '../group-history/group-history.component';
-import { ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-group-generator',
   standalone: true,
+  imports: [CommonModule, FormsModule, GroupHistoryComponent],
   templateUrl: './group-generator.component.html',
   styleUrls: ['./group-generator.component.css'],
-  imports: [CommonModule, FormsModule, GroupHistoryComponent],
 })
-export class GroupGeneratorComponent {
-    @ViewChild(GroupHistoryComponent) groupHistoryComponent?: GroupHistoryComponent;
+export class GroupGeneratorComponent implements OnInit {
+  @ViewChild(GroupHistoryComponent)
+  groupHistoryComponent?: GroupHistoryComponent;
 
-  lists: List[] = [];
-  selectedListId: string | null = null;
+  list: List | null = null;
+  listId: string | null = null;
   numberOfGroups = 2;
   errorMessage = '';
 
@@ -29,69 +29,88 @@ export class GroupGeneratorComponent {
   };
 
   constructor(
-    private groupGenerator: GroupGeneratorService,
+    private route: ActivatedRoute,
     private listService: ListService
-  ) {
-    this.lists = this.listService.getLists();
+  ) {}
 
-    this.lists.forEach((list) => {
-      if (!list.groupNames) {
-        list.groupNames = [];
-      }
-    });
+  ngOnInit(): void {
+    this.listId = this.route.snapshot.paramMap.get('listId');
+
+    if (!this.listId) {
+      this.errorMessage = 'Aucune liste sélectionnée.';
+      return;
+    }
+
+    const list = this.listService.getLists().find((l) => l.id === this.listId);
+
+    if (!list) {
+      this.errorMessage = 'Liste introuvable.';
+      return;
+    }
+
+    // Sécurisation des champs attendus
+    if (!list.groupNames) {
+      list.groupNames = [];
+    }
+
+    if (!list.generatedGroups) {
+      list.generatedGroups = [];
+    }
+
+    this.list = list;
   }
 
   clearGroups() {
-    this.lists.forEach((list) => (list.generatedGroups = []));
+    if (this.list) {
+      this.list.generatedGroups = [];
+      this.errorMessage = '';
+    }
+  }
+
+  generateGroups() {
+    if (
+      !this.list ||
+      !this.list.persons ||
+      this.list.persons.length < this.numberOfGroups
+    ) {
+      this.errorMessage = 'Pas assez de personnes.';
+      return;
+    }
+
+    let groups: Group[] = [];
+
+    if (!this.criteria.mixerAncienDwwm && !this.criteria.mixerAge) {
+      groups = this.generateWithoutCriteria(this.list.persons);
+    } else if (this.criteria.mixerAncienDwwm) {
+      groups = this.generateByAncienDwwmAndMaybeAge(this.list.persons);
+    } else if (this.criteria.mixerAge) {
+      groups = this.generateByAgeOnly(this.list.persons);
+    }
+
+    if (!groups.length) {
+      this.errorMessage =
+        'Impossible de générer des groupes différents. Essayez de modifier les critères.';
+      this.list.generatedGroups = [];
+      return;
+    }
+
+    this.list.generatedGroups = groups;
+    this.list.groupNames = groups.map((g) => g.name);
+    this.list.groupsSaved = true;
+    this.list.showSavedGroups = true;
     this.errorMessage = '';
+
+    const existingHistory = JSON.parse(
+      localStorage.getItem(`groups-${this.listId}`) || '[]'
+    );
+    existingHistory.push(groups);
+    localStorage.setItem(
+      `groups-${this.listId}`,
+      JSON.stringify(existingHistory)
+    );
+
+    this.groupHistoryComponent?.reload();
   }
-
-generateForList(listId: string) {
-  this.selectedListId = listId;
-
-  const list = this.lists.find((l) => l.id === listId);
-  if (!list) return;
-
-  if (!list.persons || list.persons.length < this.numberOfGroups) {
-    this.errorMessage = 'Pas assez de personnes pour former autant de groupes.';
-    list.generatedGroups = [];
-    return;
-  }
-
-  let groups: Group[] = [];
-
-  if (!this.criteria.mixerAncienDwwm && !this.criteria.mixerAge) {
-    groups = this.generateWithoutCriteria(list.persons);
-  } else if (this.criteria.mixerAncienDwwm) {
-    groups = this.generateByAncienDwwmAndMaybeAge(list.persons);
-  } else if (this.criteria.mixerAge) {
-    groups = this.generateByAgeOnly(list.persons);
-  }
-
-  if (!groups || groups.length === 0) {
-    this.errorMessage = 'Impossible de générer des groupes différents. Essayez de modifier les critères.';
-    list.generatedGroups = [];
-    return;
-  }
-
-  list.generatedGroups = groups;
-  list.groupNames = groups.map((g) => g.name);
-  list.groupsSaved = true;
-  list.showSavedGroups = true;
-  this.errorMessage = '';
-
-  // ✅ Récupérer l’historique existant
-  const existingHistory = JSON.parse(localStorage.getItem(`groups-${listId}`) || '[]');
-
-  // ✅ Ajouter le nouveau tirage
-  existingHistory.push(groups);
-
-  // ✅ Sauvegarder le tout
-  localStorage.setItem(`groups-${listId}`, JSON.stringify(existingHistory));
-  this.groupHistoryComponent?.reload();
-
-}
-
 
   // 🔹 Cas 1 : Aucun critère → simple mélange aléatoire
   private generateWithoutCriteria(persons: Person[]): Group[] {

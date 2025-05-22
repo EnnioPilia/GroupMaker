@@ -118,6 +118,9 @@ deletePerson(personId: string) {
   this.listService.updateList(list.id, list.name, list.persons);
   this.persons = list.persons;
 }
+goToListDetail(listId: string) {
+  this.router.navigate(['/lists', listId]);
+}
 
 
   // Récupérer la liste actuellement sélectionnée

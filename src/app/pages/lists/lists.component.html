@@ -1,159 +1,298 @@
 <!DOCTYPE html>
 <html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Gestion des Listes</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Reggae+One&display=swap"
+      rel="stylesheet"
+    />
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Gestion des Listes</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Reggae+One&display=swap" rel="stylesheet" />
-</head>
-
-<body>
-  <div class="container my-5">
-
-    <div class="card mx-auto mb-5 bg-list-header p-4"
-      style="max-width: 500px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5); border: 2px solid #c29b7f; border-radius: 0.75rem;">
-      <div class="card-body text-center">
-        <h2>Mes listes</h2>
-        <input [(ngModel)]="newListName" class="form-control form-control-custom mb-2 text-center"
-          placeholder="Nom de la liste" />
-        <button class="btn btn-primary-custom w-100" (click)="createList()">Créer</button>
-        <div *ngIf="errorMessage" class="text-danger fw-bold mt-2">{{ errorMessage }}</div>
-      </div>
-    </div>
-
-    <ul class="list-unstyled">
-      <li *ngFor="let list of lists" class="card mb-4 mx-auto bg-list-card" style="max-width: 1500px;">
-        <div class="card-body">
-          <div class="d-flex justify-content-between align-items-center mb-1">
-            <strong>{{ list.name }}</strong>
-            <div>
-              <button class="btn btn-sm btn-secondary-custom me-2" (click)="selectList(list.id)">
-                {{ selectedListId === list.id ? 'Cacher liste' : 'Ajouter personnes' }}
-              </button>
-              <button class="btn btn-sm btn-danger-custom" (click)="deleteList(list.id)">Supprimer</button>
-            </div>
+  <body>
+    <div class="container my-5">
+      <div
+        class="card mx-auto mb-5 bg-list-header p-4"
+        style="
+          max-width: 500px;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+          border: 2px solid #c29b7f;
+          border-radius: 0.75rem;
+        "
+      >
+        <div class="card-body text-center">
+          <h2>Mes listes</h2>
+          <input
+            [(ngModel)]="newListName"
+            class="form-control form-control-custom mb-2 text-center"
+            placeholder="Nom de la liste"
+          />
+          <button class="btn btn-primary-custom w-100" (click)="createList()">
+            Créer
+          </button>
+          <div *ngIf="errorMessage" class="text-danger fw-bold mt-2">
+            {{ errorMessage }}
           </div>
+        </div>
+      </div>
 
-          <div *ngIf="selectedListId === list.id" class="row gx-3 p-3"
-            style="background-color: #f3e5da; border: 1.5px solid #c29b7f; border-radius: 10px;">
-
-            <div class="col-md-6">
-              <form (ngSubmit)="submitPerson()" class="p-3 rounded"
-                style="background-color: #ecd2b6; border: 1.5px solid #c29b7f; max-width: 25rem;">
-                <div class="mb-2">
-                  <label class="form-label fw-semibold text-brown">Nom :</label>
-                  <input type="text" class="form-control form-control-custom" [(ngModel)]="formPerson.lastName"
-                    name="lastName" required minlength="3" maxlength="50" />
-                </div>
-                <div class="mb-2">
-                  <label class="form-label fw-semibold text-brown">Genre :</label>
-                  <select class="form-select form-select-custom" [(ngModel)]="formPerson.gender" name="gender" required>
-                    <option value="masculin">Masculin</option>
-                    <option value="féminin">Féminin</option>
-                    <option value="ne se prononce pas">Ne se prononce pas</option>
-                  </select>
-                </div>
-                <div class="mb-2">
-                  <label class="form-label fw-semibold text-brown">Aisance en Français :</label>
-                  <select class="form-select form-select-custom" [(ngModel)]="formPerson.frenchLevel" name="frenchLevel"
-                    required>
-                    <option *ngFor="let lvl of [1, 2, 3, 4]" [value]="lvl">{{ lvl }}</option>
-                  </select>
-                </div>
-                <div class="form-check  d-flex align-items-center mb-2 mt-3" style="padding-left: 0; margin-left: 0;">
-                  <label class="form-check-label text-brown me-3 " for="dwwmCheck ">Ancien DWWM</label>
-                  <input class="form-check-input ms-0" type="checkbox" [(ngModel)]="formPerson.isFormerDwwm"
-                    name="isFormerDwwm" id="dwwmCheck" />
-                </div>
-
-                <div class="mb-2">
-                  <label class="form-label fw-semibold text-brown">Niveau technique :</label>
-                  <select class="form-select form-select-custom" [(ngModel)]="formPerson.technicalLevel"
-                    name="technicalLevel" required>
-                    <option *ngFor="let lvl of [1, 2, 3, 4]" [value]="lvl">{{ lvl }}</option>
-                  </select>
-                </div>
-                <div class="mb-2">
-                  <label class="form-label fw-semibold text-brown">Profil :</label>
-                  <select class="form-select form-select-custom" [(ngModel)]="formPerson.profile" name="profile"
-                    required>
-                    <option value="timide">Timide</option>
-                    <option value="réservé">Réservé</option>
-                    <option value="à l’aise">À l’aise</option>
-                  </select>
-                </div>
-                <div class="mb-3">
-                  <label class="form-label fw-semibold text-brown">Âge :</label>
-                  <input type="number" class="form-control form-control-custom w-25"  [(ngModel)]="formPerson.age"
-                    name="age" min="1" max="99" required />
-                </div>
-                <div class="d-flex gap-2">
-                  <button type="submit" class="btn btn-primary-custom">{{ isEditMode ? 'Modifier' : 'Ajouter la
-                    personne'}}</button>
-                  <button *ngIf="isEditMode" type="button" class="btn btn-secondary-custom"
-                    (click)="cancelPersonForm()">Annuler</button>
-                </div>
-              </form>
+      <ul class="list-unstyled">
+        <li
+          *ngFor="let list of lists"
+          class="card mb-4 mx-auto bg-list-card"
+          style="max-width: 1500px"
+        >
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <strong>{{ list.name }}</strong>
+              <button
+                class="btn btn-outline-primary btn-sm me-2"
+                (click)="goToListDetail(list.id)"
+              >
+                👥 Ouvrir
+              </button>
+              <div>
+                <button
+                  class="btn btn-sm btn-secondary-custom me-2"
+                  (click)="selectList(list.id)"
+                >
+                  {{
+                    selectedListId === list.id
+                      ? "Cacher liste"
+                      : "Ajouter personnes"
+                  }}
+                </button>
+                <button
+                  class="btn btn-sm btn-danger-custom"
+                  (click)="deleteList(list.id)"
+                >
+                  Supprimer
+                </button>
+              </div>
             </div>
 
-            <div class="col-md-6 max-width: 42%;">
-              <h5 style="color: #5e3b2c;">Liste des personnes :</h5>
-              <div class="table-responsive" style="overflow: visible;">
-                <table class="table table-bordered border-dark table-striped align-middle">
-                  <thead class="table-dark">
-                    <tr>
-                      <th>Nom</th>
-                      <th>Genre</th>
-                      <th>Francais</th>
-                      <th>dwwm</th>
-                      <th>Technique</th>
-                      <th>Profil</th>
-                      <th>Âge</th>
-                      <th></th>
-                    </tr>
-                  </thead>
+            <div
+              *ngIf="selectedListId === list.id"
+              class="row gx-3 p-3"
+              style="
+                background-color: #f3e5da;
+                border: 1.5px solid #c29b7f;
+                border-radius: 10px;
+              "
+            >
+              <div class="col-md-6">
+                <form
+                  (ngSubmit)="submitPerson()"
+                  class="p-3 rounded"
+                  style="
+                    background-color: #ecd2b6;
+                    border: 1.5px solid #c29b7f;
+                    max-width: 25rem;
+                  "
+                >
+                  <div class="mb-2">
+                    <label class="form-label fw-semibold text-brown"
+                      >Nom :</label
+                    >
+                    <input
+                      type="text"
+                      class="form-control form-control-custom"
+                      [(ngModel)]="formPerson.lastName"
+                      name="lastName"
+                      required
+                      minlength="3"
+                      maxlength="50"
+                    />
+                  </div>
+                  <div class="mb-2">
+                    <label class="form-label fw-semibold text-brown"
+                      >Genre :</label
+                    >
+                    <select
+                      class="form-select form-select-custom"
+                      [(ngModel)]="formPerson.gender"
+                      name="gender"
+                      required
+                    >
+                      <option value="masculin">Masculin</option>
+                      <option value="féminin">Féminin</option>
+                      <option value="ne se prononce pas">
+                        Ne se prononce pas
+                      </option>
+                    </select>
+                  </div>
+                  <div class="mb-2">
+                    <label class="form-label fw-semibold text-brown"
+                      >Aisance en Français :</label
+                    >
+                    <select
+                      class="form-select form-select-custom"
+                      [(ngModel)]="formPerson.frenchLevel"
+                      name="frenchLevel"
+                      required
+                    >
+                      <option *ngFor="let lvl of [1, 2, 3, 4]" [value]="lvl">
+                        {{ lvl }}
+                      </option>
+                    </select>
+                  </div>
+                  <div
+                    class="form-check d-flex align-items-center mb-2 mt-3"
+                    style="padding-left: 0; margin-left: 0"
+                  >
+                    <label
+                      class="form-check-label text-brown me-3"
+                      for="dwwmCheck "
+                      >Ancien DWWM</label
+                    >
+                    <input
+                      class="form-check-input ms-0"
+                      type="checkbox"
+                      [(ngModel)]="formPerson.isFormerDwwm"
+                      name="isFormerDwwm"
+                      id="dwwmCheck"
+                    />
+                  </div>
 
-                  <tbody>
-                    <tr *ngIf="!persons || persons.length === 0">
-                      <td colspan="8" class="text-center text-muted">Aucune personne dans la liste</td>
-                    </tr>
-                    <tr *ngFor="let person of getSelectedList()?.persons">
-                      <td class="nom-cell">
-                        <div>{{ person.lastName }}</div>
-                      </td>
-                      <td>{{ person.gender }}</td>
-                      <td>{{ person.frenchLevel }}</td>
-                      <td>{{ person.isFormerDwwm ? 'Oui' : 'Non' }}</td>
-                      <td>{{ person.technicalLevel }}</td>
-                      <td>{{ person.profile }}</td>
-                      <td>{{ person.age }}</td>
-                      <td class="btnSupp" style="background-color:  red;">
-                        <div><button (click)="deletePerson(person.id)"
-                            style="background-color: red; border: none; ">🗑️</button></div>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+                  <div class="mb-2">
+                    <label class="form-label fw-semibold text-brown"
+                      >Niveau technique :</label
+                    >
+                    <select
+                      class="form-select form-select-custom"
+                      [(ngModel)]="formPerson.technicalLevel"
+                      name="technicalLevel"
+                      required
+                    >
+                      <option *ngFor="let lvl of [1, 2, 3, 4]" [value]="lvl">
+                        {{ lvl }}
+                      </option>
+                    </select>
+                  </div>
+                  <div class="mb-2">
+                    <label class="form-label fw-semibold text-brown"
+                      >Profil :</label
+                    >
+                    <select
+                      class="form-select form-select-custom"
+                      [(ngModel)]="formPerson.profile"
+                      name="profile"
+                      required
+                    >
+                      <option value="timide">Timide</option>
+                      <option value="réservé">Réservé</option>
+                      <option value="à l’aise">À l’aise</option>
+                    </select>
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label fw-semibold text-brown"
+                      >Âge :</label
+                    >
+                    <input
+                      type="number"
+                      class="form-control form-control-custom w-25"
+                      [(ngModel)]="formPerson.age"
+                      name="age"
+                      min="1"
+                      max="99"
+                      required
+                    />
+                  </div>
+                  <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary-custom">
+                      {{
+                        isEditMode
+                          ? "Modifier"
+                          : "Ajouter la
+                    personne"
+                      }}
+                    </button>
+                    <button
+                      *ngIf="isEditMode"
+                      type="button"
+                      class="btn btn-secondary-custom"
+                      (click)="cancelPersonForm()"
+                    >
+                      Annuler
+                    </button>
+                  </div>
+                </form>
+              </div>
+
+              <div class="col-md-6 max-width: 42%;">
+                <h5 style="color: #5e3b2c">Liste des personnes :</h5>
+                <div class="table-responsive" style="overflow: visible">
+                  <table
+                    class="table table-bordered border-dark table-striped align-middle"
+                  >
+                    <thead class="table-dark">
+                      <tr>
+                        <th>Nom</th>
+                        <th>Genre</th>
+                        <th>Francais</th>
+                        <th>dwwm</th>
+                        <th>Technique</th>
+                        <th>Profil</th>
+                        <th>Âge</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+
+                    <tbody>
+                      <tr *ngIf="!persons || persons.length === 0">
+                        <td colspan="8" class="text-center text-muted">
+                          Aucune personne dans la liste
+                        </td>
+                      </tr>
+                      <tr *ngFor="let person of getSelectedList()?.persons">
+                        <td class="nom-cell">
+                          <div>{{ person.lastName }}</div>
+                        </td>
+                        <td>{{ person.gender }}</td>
+                        <td>{{ person.frenchLevel }}</td>
+                        <td>{{ person.isFormerDwwm ? "Oui" : "Non" }}</td>
+                        <td>{{ person.technicalLevel }}</td>
+                        <td>{{ person.profile }}</td>
+                        <td>{{ person.age }}</td>
+                        <td class="btnSupp" style="background-color: red">
+                          <div>
+                            <button
+                              (click)="deletePerson(person.id)"
+                              style="background-color: red; border: none"
+                            >
+                              🗑️
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </li>
-    </ul>
+        </li>
+      </ul>
 
-    <div class="text-center my-5" *ngIf="lists && lists.length > 0">
-      <a routerLink="/group-generator">
-        <button type="button" class="btn btn-secondary-custom fs-5 px-4 py-3 mb-5" style="border: 1px solid #7a5a49;"
-          (click)="goToGroupGenerator()">
-          Générer des groupes
-        </button>
-      </a>
+      <div class="text-center my-5" *ngIf="lists && lists.length > 0">
+        <a routerLink="/group-generator">
+          <button
+            type="button"
+            class="btn btn-secondary-custom fs-5 px-4 py-3 mb-5"
+            style="border: 1px solid #7a5a49"
+            (click)="goToGroupGenerator()"
+          >
+            Générer des groupes
+          </button>
+        </a>
+      </div>
     </div>
-  </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
 </html>
