@@ -21,7 +21,7 @@ export class RegisterComponent {
     name: new FormControl('', [Validators.required,Validators.minLength(2)]),
     email: new FormControl('', [Validators.required, Validators.email]),
     passWord: new FormControl('', [Validators.required,Validators.minLength(8)]),
-    age: new FormControl(null, [Validators.required, Validators.min(18)])
+    age: new FormControl(null, [Validators.required, Validators.min(8)])
 
   });
 
