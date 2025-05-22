@@ -5,7 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { ListService, List } from '../../core/list.services';
 import { Group } from '../../core/models/group.model';
 import { Person } from '../../core/models/person.model';
-import { GroupHistoryComponent } from '../group-history/group-history.component';
+import { GroupHistoryComponent } from '../../group-history/group-history.component';
 
 @Component({
   selector: 'app-group-generator',

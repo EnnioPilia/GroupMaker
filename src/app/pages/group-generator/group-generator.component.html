@@ -1,152 +1,112 @@
-<body>
-  <div class="bg-list-header" *ngIf="list">
-    <div
-      class="bg-list-header p-4 mb-4"
-      style="
-        background-color: #ddb393;
-        border: 2px solid #c29b7f;
-        border-radius: 0.75rem;
-      "
-    >
-      <h2 class="text-center mb-0">Générateur de groupes</h2>
+<div class="container my-5" *ngIf="list">
+  <!-- En-tête -->
+  <div class="bg-list-header p-4 mb-4 rounded border border-2 border-custom">
+    <h2 class="text-center mb-0">Générateur de groupes</h2>
 
-      <div
-        class="d-flex align-items-center gap-4 mb-3"
-        style="max-width: 600px"
-      >
-        <div class="d-flex align-items-center mt-4" style="gap: 10px">
-          <label for="numberOfGroups" class="form-label mb-0">Nombre :</label>
-          <input
-            type="number"
-            id="numberOfGroups"
-            name="numberOfGroups"
-            class="form-control form-control-custom"
-            style="width: 55px; background-color: #bd8e6a; font-weight: 600"
-            min="1"
-            [(ngModel)]="numberOfGroups"
-            required
-          />
-        </div>
+    <!-- Paramètres de génération -->
+    <div class="d-flex flex-wrap align-items-center gap-4 mt-4" style="max-width: 600px;">
+      <div class="d-flex align-items-center gap-2">
+        <label for="numberOfGroups" class="form-label mb-0">Nombre :</label>
+        <input
+          type="number"
+          id="numberOfGroups"
+          [(ngModel)]="numberOfGroups"
+          class="form-control"
+          style="width: 70px;"
+          min="1"
+          required
+        />
+      </div>
 
-        <div class="form-check d-flex align-items-center me-3">
-          <input
-            type="checkbox"
-            id="mixerAncienDwwm"
-            [(ngModel)]="criteria.mixerAncienDwwm"
-            class="form-check-input"
-          />
-          <label for="mixerAncienDwwm" class="form-check-label ms-2"
-            >Mixer DWWM</label
-          >
-        </div>
+      <div class="form-check">
+        <input
+          id="mixerAncienDwwm"
+          type="checkbox"
+          class="form-check-input"
+          [(ngModel)]="criteria.mixerAncienDwwm"
+        />
+        <label for="mixerAncienDwwm" class="form-check-label">Mixer DWWM</label>
+      </div>
 
-        <div class="form-check d-flex align-items-center">
-          <input
-            type="checkbox"
-            id="mixerAge"
-            [(ngModel)]="criteria.mixerAge"
-            class="form-check-input"
-          />
-          <label for="mixerAge" class="form-check-label ms-2">Mixer âge</label>
-        </div>
+      <div class="form-check">
+        <input
+          id="mixerAge"
+          type="checkbox"
+          class="form-check-input"
+          [(ngModel)]="criteria.mixerAge"
+        />
+        <label for="mixerAge" class="form-check-label">Mixer âge</label>
       </div>
     </div>
-
-    <div class="mb-4" style="max-width: 600px">
-      <div
-        class="p-3 mb-3"
-        style="
-          background-color: #ddb393;
-          border: 1px solid #7a5a49;
-          border-radius: 0.375rem;
-        "
-      >
-        <h4 class="mb-3">{{ list.name }}</h4>
-
-        <form #groupForm="ngForm" (ngSubmit)="generateGroups()" novalidate>
-          <div class="d-flex justify-content-center">
-            <button
-              type="submit"
-              class="btn btn-primary-custom"
-              style="width: 45%"
-              [disabled]="groupForm.invalid"
-            >
-              Générer les groupes
-            </button>
-          </div>
-        </form>
-
-        <div *ngIf="list?.generatedGroups?.length > 0" class="mt-3">
-          <div
-            *ngFor="let group of list.generatedGroups"
-            class="group-card mb-3"
-          >
-            <h3>{{ group.name }}</h3>
-            <ul>
-              <li
-                *ngFor="let person of group.persons"
-                class="card mb-2 p-3 d-flex align-items-flex-start"
-                style="
-                  font-weight: 600;
-                  cursor: grab;
-                  background-color: #dcb49e;
-                  border: 1px solid #7a5a49;
-                  border-radius: 10px;
-                  color: #3a2a20;
-                "
-              >
-                <div>
-                  {{ person.lastName }} ({{ person.age }} ans)
-                  <span *ngIf="person.isFormerDwwm">- Ancien DWWM</span>
-                </div>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      <div
-        class="d-flex justify-content-center"
-        *ngIf="list?.generatedGroups?.length > 0"
-      >
-        <button class="btn btn-danger-custom" (click)="clearGroups()">
-          Supprimer les groupes
-        </button>
-      </div>
-
-      <div *ngIf="list.showSavedGroups && list?.groupNames?.length > 0">
-        <div
-          *ngFor="let group of list.generatedGroups; let i = index"
-          class="mb-3"
-        >
-          <label
-            [for]="'groupName' + i"
-            class="form-label fw-semibold text-dark"
-          >
-            Nom du groupe {{ i + 1 }} :
-          </label>
-          <input
-            type="text"
-            class="form-control"
-            [id]="'groupName' + i"
-            [(ngModel)]="list.groupNames?.[i]"
-          />
-        </div>
-
-        <div class="d-flex justify-content-center">
-          <button class="btn btn-primary" (click)="updateGroupNames(list)">
-            Mettre à jour les noms
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <div *ngIf="errorMessage" class="text-danger mt-3 text-center fw-bold">
-      {{ errorMessage }}
-    </div>
-
-    <app-group-history *ngIf="list" [listId]="list.id"></app-group-history>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
+  <!-- Détails de la liste et bouton de génération -->
+  <div class="card p-4 mb-4 border border-custom rounded" style="max-width: 600px;">
+    <h4 class="mb-3">{{ list.name }}</h4>
+
+    <form #groupForm="ngForm" (ngSubmit)="generateGroups()" novalidate>
+      <div class="text-center">
+        <button
+          type="submit"
+          class="btn btn-primary-custom w-50"
+          [disabled]="groupForm.invalid"
+        >
+          🎲 Générer les groupes
+        </button>
+      </div>
+    </form>
+
+    <!-- Groupes générés -->
+    <div *ngIf="list.generatedGroups?.length > 0" class="mt-4">
+      <div *ngFor="let group of list.generatedGroups" class="mb-3">
+        <h5>{{ group.name }}</h5>
+        <ul class="list-unstyled">
+          <li
+            *ngFor="let person of group.persons"
+            class="p-2 mb-2 rounded border d-flex align-items-start"
+            style="background-color: #dcb49e;"
+          >
+            {{ person.lastName }} ({{ person.age }} ans)
+            <span *ngIf="person.isFormerDwwm"> - Ancien DWWM</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Bouton de suppression -->
+    <div class="text-center" *ngIf="list.generatedGroups?.length > 0">
+      <button class="btn btn-danger-custom" (click)="clearGroups()">
+        Supprimer les groupes
+      </button>
+    </div>
+  </div>
+
+  <!-- Formulaire de renommage des groupes -->
+  <div *ngIf="list.showSavedGroups && list.groupNames?.length > 0" class="card p-4 mb-4 border border-custom rounded">
+    <div *ngFor="let group of list.generatedGroups; let i = index" class="mb-3">
+      <label [for]="'groupName' + i" class="form-label fw-semibold">
+        Nom du groupe {{ i + 1 }} :
+      </label>
+      <input
+        type="text"
+        class="form-control"
+        [id]="'groupName' + i"
+        [(ngModel)]="list.groupNames[i]"
+      />
+    </div>
+
+    <div class="text-center">
+      <button class="btn btn-primary" (click)="updateGroupNames(list)">
+        Mettre à jour les noms
+      </button>
+    </div>
+  </div>
+
+  <!-- Message d'erreur -->
+  <div *ngIf="errorMessage" class="alert alert-danger text-center">
+    {{ errorMessage }}
+  </div>
+
+  <!-- Historique des groupes -->
+  <app-group-history *ngIf="list" [listId]="list.id"></app-group-history>
+</div>

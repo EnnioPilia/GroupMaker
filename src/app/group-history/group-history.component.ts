@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Group } from '../../core/models/group.model';
+import { Group } from '../core/models/group.model';
 
 @Component({
   selector: 'app-group-history',
