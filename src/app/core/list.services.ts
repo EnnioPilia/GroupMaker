@@ -10,8 +10,8 @@ export interface List {
   name: string;
   persons: Person[];
   draws: number;
-  generatedGroups?: Group[];  // <-- ajoute cette propriété
-    groupsSaved?: boolean;
+  generatedGroups?: Group[]; 
+  groupsSaved?: boolean;
   groupNames?: string[];
   showSavedGroups?: boolean;
   

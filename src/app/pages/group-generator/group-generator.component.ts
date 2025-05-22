@@ -5,13 +5,14 @@ import { GroupGeneratorService } from '../../core/group-generator.service';
 import { ListService, List } from '../../core/list.services';
 import { Group } from '../../core/models/group.model';
 import { Person } from '../../core/models/person.model';
+import { GroupSaveComponent } from '../group-save/group-save.component';
 
 @Component({
   selector: 'app-group-generator',
   standalone: true,
   templateUrl: './group-generator.component.html',
   styleUrls: ['./group-generator.component.css'],
-  imports: [CommonModule, FormsModule]
+  imports: [CommonModule, FormsModule,GroupSaveComponent]
 })
 export class GroupGeneratorComponent {
   lists: List[] = [];
@@ -171,29 +172,14 @@ export class GroupGeneratorComponent {
     }
     return array;
   }
-
-saveGroups(list: List) {
-  console.log('saveGroups called for list:', list);
-  if (!list) return;
-  list.groupsSaved = true;
-  if (!list.groupNames) {
-    list.groupNames = list.generatedGroups?.map(g => g.name) || [];
-  }
-  list.showSavedGroups = true;
-}
-
-
-updateGroupNames(list: List) {
-  if (!list.generatedGroups || !list.groupNames) return;
-
-  list.generatedGroups.forEach((group, i) => {
-    if (list.groupNames && list.groupNames[i]) {
-      group.name = list.groupNames[i];
+saveGroups(updatedGroups: Group[]) {
+  // Ici tu peux faire ce que tu veux avec les groupes modifiés (ex: sauvegarder dans un service)
+  this.lists.forEach(list => {
+    if (list.generatedGroups) {
+      list.generatedGroups = updatedGroups;
+      list.groupsSaved = true;
     }
   });
 }
 
-toggleSavedGroupsVisibility(list: List) {
-  list.showSavedGroups = !list.showSavedGroups;
-}
 }

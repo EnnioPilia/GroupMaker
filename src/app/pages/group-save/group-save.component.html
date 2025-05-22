@@ -1,0 +1,24 @@
+<div *ngIf="groups && groups.length > 0" class="card p-4 mx-auto" style="max-width: 600px; background-color: #ebd2c2; border: 1.5px solid #c29b7f; border-radius: 0.75rem; box-shadow: 0 0 10px rgba(0,0,0,0.1); color: #3a2a20;">
+  <h2 class="text-center mb-4" style="color: #5e3b2c; font-weight: 700;">Groupes enregistrés</h2>
+
+  <div *ngFor="let group of groups; let i = index" class="mb-3 p-3" style="background-color: #ecc4ab; border: 1.5px solid #c29b7f; border-radius: 0.75rem; box-shadow: 0 0 10px rgba(0,0,0,0.1); color: #3a2a20;">
+    <label [for]="'groupName' + i" class="form-label fw-semibold text-secondary">
+      Nom du groupe {{ i + 1 }} :
+    </label>
+    <input
+      type="text"
+      [id]="'groupName' + i"
+      [(ngModel)]="groupNames[i]"
+      class="form-control fw-semibold"
+      style="background-color: #f8e7de; border: 1px solid #7a5a49; color: #3a2a20;"
+    />
+  </div>
+
+  <button
+    class="btn btn-primary w-100 fw-semibold mt-3"
+    style="background-color: #8b5237; border: none;"
+    (click)="onSave()"
+  >
+    Enregistrer les groupes
+  </button>
+</div>

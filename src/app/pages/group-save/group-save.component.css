@@ -1,0 +1,38 @@
+.bg-custom-container {
+  background-color: #ebd2c2;
+  border: 1.5px solid #c29b7f;
+  border-radius: 0.75rem;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  color: #3a2a20;
+  max-width: 600px;
+  margin: auto;
+  padding: 1.5rem;
+}
+
+.group-card-custom {
+  background-color: #ecc4ab;
+  border: 1.5px solid #c29b7f;
+  border-radius: 0.75rem;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  color: #3a2a20;
+  padding: 1rem 1.5rem;
+  margin-bottom: 1rem;
+}
+
+input.form-control-custom {
+  background-color: #f8e7de;
+  border: 1px solid #7a5a49;
+  color: #3a2a20;
+  font-weight: 600;
+}
+
+.btn-primary-custom {
+  background-color: #8b5237;
+  border: none;
+  font-weight: 600;
+}
+
+.btn-primary-custom:hover {
+  background-color: #a86d4f;
+  color: #5e3b2c;
+}

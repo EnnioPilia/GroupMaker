@@ -1,6 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Poiret+One&display=swap");
 
-body {
+.body {
   font-family: "Poiret One", sans-serif !important;
   background-color: #9e8167;
   color: #3a2a20;
