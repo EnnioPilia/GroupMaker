@@ -1,0 +1,21 @@
+<div *ngIf="storedGroupHistory.length > 0">
+  <h4 class="mt-4">📜 Historique des groupes générés</h4>
+
+  <div *ngFor="let generation of storedGroupHistory; let genIndex = index" class="mb-4 p-3 border rounded">
+    <h5 class="mb-3">🕑 Tirage #{{ genIndex + 1 }}</h5>
+
+    <div *ngFor="let group of generation" class="mb-2">
+      <strong>{{ group.name }}</strong>
+      <ul class="mb-2">
+        <li *ngFor="let person of group.persons">
+          {{ person.lastName }} ({{ person.age }} ans)
+          <span *ngIf="person.isFormerDwwm">- Ancien DWWM</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="storedGroupHistory.length === 0" class="alert alert-info">
+  Aucun groupe généré pour cette liste.
+</div>

@@ -5,15 +5,19 @@ import { GroupGeneratorService } from '../../core/group-generator.service';
 import { ListService, List } from '../../core/list.services';
 import { Group } from '../../core/models/group.model';
 import { Person } from '../../core/models/person.model';
+import { GroupHistoryComponent } from '../group-history/group-history.component';
+import { ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-group-generator',
   standalone: true,
   templateUrl: './group-generator.component.html',
   styleUrls: ['./group-generator.component.css'],
-  imports: [CommonModule, FormsModule]
+  imports: [CommonModule, FormsModule, GroupHistoryComponent],
 })
 export class GroupGeneratorComponent {
+    @ViewChild(GroupHistoryComponent) groupHistoryComponent?: GroupHistoryComponent;
+
   lists: List[] = [];
   selectedListId: string | null = null;
   numberOfGroups = 2;
@@ -21,7 +25,7 @@ export class GroupGeneratorComponent {
 
   criteria = {
     mixerAncienDwwm: false,
-    mixerAge: false
+    mixerAge: false,
   };
 
   constructor(
@@ -30,46 +34,64 @@ export class GroupGeneratorComponent {
   ) {
     this.lists = this.listService.getLists();
 
-  this.lists.forEach(list => {
-    if (!list.groupNames) {
-      list.groupNames = [];
-    }
-  });
-}
+    this.lists.forEach((list) => {
+      if (!list.groupNames) {
+        list.groupNames = [];
+      }
+    });
+  }
 
   clearGroups() {
-    this.lists.forEach(list => list.generatedGroups = []);
+    this.lists.forEach((list) => (list.generatedGroups = []));
     this.errorMessage = '';
   }
 
-  generateForList(listId: string) {
-    const list = this.lists.find(l => l.id === listId);
-    if (!list) return;
+generateForList(listId: string) {
+  this.selectedListId = listId;
 
-    if (!list.persons || list.persons.length < this.numberOfGroups) {
-      this.errorMessage = "Pas assez de personnes pour former autant de groupes.";
-      list.generatedGroups = [];
-      return;
-    }
+  const list = this.lists.find((l) => l.id === listId);
+  if (!list) return;
 
-    let groups: Group[] = [];
-
-    if (!this.criteria.mixerAncienDwwm && !this.criteria.mixerAge) {
-      groups = this.generateWithoutCriteria(list.persons);
-    } else if (this.criteria.mixerAncienDwwm) {
-      groups = this.generateByAncienDwwmAndMaybeAge(list.persons);
-    } else if (this.criteria.mixerAge) {
-      groups = this.generateByAgeOnly(list.persons);
-    }
-
-    if (!groups || groups.length === 0) {
-      this.errorMessage = "Impossible de générer des groupes différents. Essayez de modifier les critères.";
-      list.generatedGroups = [];
-    } else {
-      list.generatedGroups = groups;
-      this.errorMessage = '';
-    }
+  if (!list.persons || list.persons.length < this.numberOfGroups) {
+    this.errorMessage = 'Pas assez de personnes pour former autant de groupes.';
+    list.generatedGroups = [];
+    return;
   }
+
+  let groups: Group[] = [];
+
+  if (!this.criteria.mixerAncienDwwm && !this.criteria.mixerAge) {
+    groups = this.generateWithoutCriteria(list.persons);
+  } else if (this.criteria.mixerAncienDwwm) {
+    groups = this.generateByAncienDwwmAndMaybeAge(list.persons);
+  } else if (this.criteria.mixerAge) {
+    groups = this.generateByAgeOnly(list.persons);
+  }
+
+  if (!groups || groups.length === 0) {
+    this.errorMessage = 'Impossible de générer des groupes différents. Essayez de modifier les critères.';
+    list.generatedGroups = [];
+    return;
+  }
+
+  list.generatedGroups = groups;
+  list.groupNames = groups.map((g) => g.name);
+  list.groupsSaved = true;
+  list.showSavedGroups = true;
+  this.errorMessage = '';
+
+  // ✅ Récupérer l’historique existant
+  const existingHistory = JSON.parse(localStorage.getItem(`groups-${listId}`) || '[]');
+
+  // ✅ Ajouter le nouveau tirage
+  existingHistory.push(groups);
+
+  // ✅ Sauvegarder le tout
+  localStorage.setItem(`groups-${listId}`, JSON.stringify(existingHistory));
+  this.groupHistoryComponent?.reload();
+
+}
+
 
   // 🔹 Cas 1 : Aucun critère → simple mélange aléatoire
   private generateWithoutCriteria(persons: Person[]): Group[] {
@@ -81,8 +103,8 @@ export class GroupGeneratorComponent {
 
   // 🔹 Cas 2 : Mixer DWWM, peut-être avec l'âge
   private generateByAncienDwwmAndMaybeAge(persons: Person[]): Group[] {
-    const anciens = persons.filter(p => p.isFormerDwwm);
-    const autres = persons.filter(p => !p.isFormerDwwm);
+    const anciens = persons.filter((p) => p.isFormerDwwm);
+    const autres = persons.filter((p) => !p.isFormerDwwm);
 
     const groups = this.initEmptyGroups();
 
@@ -100,7 +122,7 @@ export class GroupGeneratorComponent {
     });
 
     // Tri par âge dans chaque groupe (optionnel)
-    groups.forEach(group => group.persons.sort((a, b) => a.age - b.age));
+    groups.forEach((group) => group.persons.sort((a, b) => a.age - b.age));
 
     return groups;
   }
@@ -110,7 +132,10 @@ export class GroupGeneratorComponent {
     const sorted = [...persons].sort((a, b) => a.age - b.age);
 
     // Étape 2 : regrouper par tranche d’âge pour répartir les âges
-    const ageBuckets: Person[][] = Array.from({ length: this.numberOfGroups }, () => []);
+    const ageBuckets: Person[][] = Array.from(
+      { length: this.numberOfGroups },
+      () => []
+    );
 
     sorted.forEach((person, index) => {
       ageBuckets[index % this.numberOfGroups].push(person);
@@ -120,11 +145,14 @@ export class GroupGeneratorComponent {
     const shuffled = this.shuffleArray(ageBuckets.flat());
 
     // Étape 4 : créer les groupes
-    const groups: Group[] = Array.from({ length: this.numberOfGroups }, (_, i) => ({
-      id: `group-${i + 1}`,
-      name: `Groupe ${i + 1}`,
-      persons: []
-    }));
+    const groups: Group[] = Array.from(
+      { length: this.numberOfGroups },
+      (_, i) => ({
+        id: `group-${i + 1}`,
+        name: `Groupe ${i + 1}`,
+        persons: [],
+      })
+    );
 
     // Étape 5 : distribution équilibrée des personnes
     shuffled.forEach((person, index) => {
@@ -134,13 +162,12 @@ export class GroupGeneratorComponent {
     return groups;
   }
 
-
   // 🔹 Créer des groupes vides
   private initEmptyGroups(): Group[] {
     return Array.from({ length: this.numberOfGroups }, (_, i) => ({
       id: `group-${i + 1}`,
       name: `Groupe ${i + 1}`,
-      persons: []
+      persons: [],
     }));
   }
 
@@ -172,28 +199,17 @@ export class GroupGeneratorComponent {
     return array;
   }
 
-saveGroups(list: List) {
-  console.log('saveGroups called for list:', list);
-  if (!list) return;
-  list.groupsSaved = true;
-  if (!list.groupNames) {
-    list.groupNames = list.generatedGroups?.map(g => g.name) || [];
+  updateGroupNames(list: List) {
+    if (!list.generatedGroups || !list.groupNames) return;
+
+    list.generatedGroups.forEach((group, i) => {
+      if (list.groupNames && list.groupNames[i]) {
+        group.name = list.groupNames[i];
+      }
+    });
   }
-  list.showSavedGroups = true;
-}
 
-
-updateGroupNames(list: List) {
-  if (!list.generatedGroups || !list.groupNames) return;
-
-  list.generatedGroups.forEach((group, i) => {
-    if (list.groupNames && list.groupNames[i]) {
-      group.name = list.groupNames[i];
-    }
-  });
-}
-
-toggleSavedGroupsVisibility(list: List) {
-  list.showSavedGroups = !list.showSavedGroups;
-}
+  toggleSavedGroupsVisibility(list: List) {
+    list.showSavedGroups = !list.showSavedGroups;
+  }
 }
