@@ -24,10 +24,13 @@ export class RegisterComponent {
     age: new FormControl(null, [Validators.required, Validators.min(18)])
 
   });
+  constructor(private router: Router) {}
 
   onSubmit() {
     if (this.registerForm.valid) {
       console.log(this.registerForm.value);
+            this.router.navigate(['/lists']);
+
     }
   }
 }

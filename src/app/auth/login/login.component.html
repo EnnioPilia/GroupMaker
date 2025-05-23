@@ -1,6 +1,6 @@
 <body style="background-color: #e2c7af;">
-  <div class="card mx-auto mt-5 mb-5 bg-list-header p-4" 
-       style="max-width: 500px; border: 2px solid #c29b7f; border-radius: 0.75rem; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);">
+  <div class="card mx-auto mt-5 mb-5 bg-list-header p-4"
+    style="max-width: 500px; border: 2px solid #c29b7f; border-radius: 0.75rem; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);">
 
     <h2 class="text-center mb-4" style="color: #5e3b2c;">Connexion</h2>
 
@@ -24,9 +24,13 @@
         </div>
       </div>
 
-      <button type="submit" class="btn btn-primary-custom w-100" [disabled]="loginForm.invalid">
+      <button type="submit" class="btn btn-primary-custom w-100 mt-2" [disabled]="loginForm.invalid">
         Se connecter
       </button>
+
+      <div class="text-center mt-3">
+        <a (click)="goToRegister()"  style="cursor: pointer; ">Créer un compte</a>
+      </div>
 
       <div *ngIf="errorMessage" class="text-danger fw-bold mt-3 text-center">{{ errorMessage }}</div>
     </form>

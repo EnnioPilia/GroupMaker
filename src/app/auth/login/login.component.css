@@ -82,3 +82,15 @@ body {
    border-color: #d64545 !important;
    box-shadow: 0 0 5px rgba(214, 69, 69, 0.5);
  }
+
+ a{
+  color: #5e3b2c;
+  font-weight: 500; 
+  font-size: 22px;
+  border-bottom: #3a2a20 1px solid;
+  
+ }
+
+a:hover {
+  filter: blur(0.5px);
+}
