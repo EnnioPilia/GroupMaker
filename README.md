@@ -10,7 +10,7 @@ Cette application permet de générer dynamiquement des groupes d’apprenants �
 L’application est en ligne et prête à l’emploi.
 Il vous suffit de cliquer sur le lien ci-dessous pour la découvrir dans un environnement réel :
 
-👉 Accéder à l’application: http://group-maker-one.vercel.app/
+👉 Accéder à l’application: [Tester l'application](http://group-maker-one.vercel.app/)
 
 N’hésitez pas à explorer ses fonctionnalités et à partager vos retours !
 
