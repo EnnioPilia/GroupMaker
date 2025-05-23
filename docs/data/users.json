@@ -1,0 +1,14 @@
+[
+  {
+    "email": "test@simplon.com",
+    "password": "aze",
+    "firstName": "Barney",
+    "lastName": "Gumble"
+  },
+  {
+    "email": "admin@simplon.com",
+    "password": "aze",
+    "firstName": "Admin",
+    "lastName": "Simplon"
+  }
+]
