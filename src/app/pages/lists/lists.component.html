@@ -98,15 +98,16 @@
               </form>
             </div>
 
-            <div class="col-md-6 max-width: 42%;">
+            <div class="col-12 col-md-6 mx-auto " style="width: 100%; max-width: 600px;">
               <h5 style="color: #5e3b2c; font-weight:600">Liste des personnes :</h5>
-              <div class="table-responsive ;" style="overflow: visible;">
-                <table class="table table-bordered border-dark table-striped align-middle;">
+              <div class="table-responsive" style="overflow-x: auto; max-width: 100%;">
+                <table class="table table-bordered border-dark table-striped align-middle"
+                  style="width: 100%; white-space: nowrap;">
                   <thead class="table-dark">
                     <tr>
                       <th>Nom</th>
                       <th>Genre</th>
-                      <th>Francais</th>
+                      <th>Français</th>
                       <th>dwwm</th>
                       <th>Technique</th>
                       <th>Profil</th>
@@ -114,31 +115,28 @@
                       <th></th>
                     </tr>
                   </thead>
-
                   <tbody>
                     <tr *ngIf="!persons || persons.length === 0">
                       <td colspan="8" class="text-center text-muted">Aucune personne dans la liste</td>
                     </tr>
                     <tr *ngFor="let person of getSelectedList()?.persons">
-                      <td class="nom-cell">
-                        <div>{{ person.lastName }}</div>
-                      </td>
+                      <td class="nom-cell">{{ person.lastName }}</td>
                       <td>{{ person.gender }}</td>
                       <td>{{ person.frenchLevel }}</td>
                       <td>{{ person.isFormerDwwm ? 'Oui' : 'Non' }}</td>
                       <td>{{ person.technicalLevel }}</td>
                       <td>{{ person.profile }}</td>
                       <td>{{ person.age }}</td>
-                      <td class="btnSupp" style="background-color: red;">
-                        <button (click)="deletePerson(person.id)"
-                          style="background-color: red; border: none; color: white; font-weight: bold; font-size: 1.2rem; cursor: pointer;">✖</button>
+                      <td class="btnSupp text-center">
+
+                        <button (click)="deletePerson(person.id)" style="width: 100%;height: 100%;background-color: red; border: none; color: white; font-weight: bold; font-size: 1.2rem; cursor: pointer;">✖</button>
                       </td>
                     </tr>
                   </tbody>
                 </table>
               </div>
             </div>
-            
+
           </div>
         </div>
       </li>
