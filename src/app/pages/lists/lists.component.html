@@ -24,7 +24,7 @@
     </div>
 
     <ul class="list-unstyled">
-      <li *ngFor="let list of lists" class="card mb-4 mx-auto bg-list-card" style="max-width: 1500px;">
+      <li *ngFor="let list of lists" class="card mb-4 mx-auto bg-list-card" style="max-width: 1100px;">
         <div class="card-body">
           <div class="d-flex justify-content-between align-items-center mb-1">
             <strong>{{ list.name }}</strong>
@@ -99,9 +99,9 @@
             </div>
 
             <div class="col-md-6 max-width: 42%;">
-              <h5 style="color: #5e3b2c;">Liste des personnes :</h5>
-              <div class="table-responsive" style="overflow: visible;">
-                <table class="table table-bordered border-dark table-striped align-middle">
+              <h5 style="color: #5e3b2c; font-weight:600">Liste des personnes :</h5>
+              <div class="table-responsive ;" style="overflow: visible;">
+                <table class="table table-bordered border-dark table-striped align-middle;">
                   <thead class="table-dark">
                     <tr>
                       <th>Nom</th>
@@ -133,12 +133,12 @@
                         <button (click)="deletePerson(person.id)"
                           style="background-color: red; border: none; color: white; font-weight: bold; font-size: 1.2rem; cursor: pointer;">✖</button>
                       </td>
-
                     </tr>
                   </tbody>
                 </table>
               </div>
             </div>
+            
           </div>
         </div>
       </li>

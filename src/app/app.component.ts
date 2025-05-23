@@ -6,7 +6,6 @@ import { RouterModule } from '@angular/router';
   standalone: true,
   imports: [RouterModule],
   template: `
-    <h1>Hello, {{ title }}</h1>
     <router-outlet></router-outlet>
   `
 })

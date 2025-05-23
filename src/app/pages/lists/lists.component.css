@@ -136,11 +136,6 @@ table.table-bordered th {
     padding: 0.25rem 0.5rem;
 }
 
-.table-responsive {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-}
-
 table.table {
     min-width: 500px;
 }
@@ -158,4 +153,10 @@ table.table {
 .btn-secondary-custom,
 .btn-danger-custom {
     font-weight: 700;
+}
+
+
+.table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
 }
