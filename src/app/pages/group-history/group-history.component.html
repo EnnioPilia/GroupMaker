@@ -1,26 +1,25 @@
-<div *ngIf="storedGroupHistory.length > 0" style="max-width: 600px; margin: 0 auto;">
-  <h4 class="mt-4 mb-3 text-center" style="font-weight: 600; padding-bottom: 8px;">
-    Historique des groupes générés
-  </h4>
+<div *ngIf="storedGroupHistory.length > 0" class="history-container mx-auto">
+  <h4 class="history-title text-center">Historique des groupes générés</h4>
 
-  <div *ngFor="let generation of storedGroupHistory; let genIndex = index" 
-       class="mb-4 p-3 " 
-       style="
-         background-color: #dcb49e; 
-         border: 1px solid #7a5a49; 
-         border-radius: 10px;
-         color: #3a2a20;
-       ">
-    <h5 class="mb-3" style="font-weight: 700;">TIRAGE #{{ genIndex + 1 }}</h5>
+  <div *ngFor="let generation of storedGroupHistory; let genIndex = index" class="history-box">
+    <h5 class="history-subtitle">TIRAGE #{{ genIndex + 1 }}</h5>
 
-    <div *ngFor="let group of generation" class="mb-3">
-      <strong style="font-weight: 600; border-bottom: 2px solid #7a5a49">{{ group.name }}</strong>
-      <ul class="mb-2" style="padding-left: 20px;">
-        <li *ngFor="let person of group.persons" style="margin-bottom: 6px; font-weight: 600;">
+    <div *ngFor="let group of generation" class="history-group">
+      <strong class="group-name">{{ group.name }}</strong>
+      <ul class="group-list">
+        <li *ngFor="let person of group.persons" class="group-person">
           {{ person.lastName }} ({{ person.age }} ans)
-          <span *ngIf="person.isFormerDwwm" style=" font-weight: 600;"> - Ancien DWWM</span>
+          <span *ngIf="person.isFormerDwwm" class="former-dwwm"> - Ancien DWWM</span>
         </li>
       </ul>
     </div>
+    
   </div>
+  
 </div>
+
+        <div class="d-flex justify-content-center mt-3">
+          <button class="btn btn-danger-custom" (click)="deleteSavedGroups(list.id)">
+            Supprimer les groupes
+          </button>
+        </div>

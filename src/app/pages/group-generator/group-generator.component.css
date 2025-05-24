@@ -45,6 +45,8 @@ h2 {
 h4 {
   text-align: center;
   font-weight: 600;
+  font-size: 3rem;
+  color: #5e3b2c;
 
 }
 
@@ -149,4 +151,144 @@ ul {
 .form-select {
   text-align: center;
   text-align-last: center;
+}
+
+@media (max-width: 767.98px) {
+  .d-flex.align-items-center.gap-4 {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 1rem !important;
+  }
+
+  .d-flex.align-items-center.mt-4 {
+    justify-content: flex-start;
+    gap: 0.5rem;
+    width: 100%;
+  }
+
+  input.form-control-custom {
+    width: 80px !important;
+  }
+
+  .form-check.d-flex.align-items-center.me-3.ms-4.mt-3,
+  .form-check.d-flex.align-items-center.mt-3 {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .form-check-label.ms-2 {
+    font-weight: 600;
+    color: #5e3b2c;
+  }
+}
+
+.group-card {
+  max-width: 600px;
+  width: 100%;
+  margin: 0 auto 1.5rem;
+  background-color: #ecc4ab;
+  border: 1.5px solid #c29b7f;
+  border-radius: 0.75rem;
+  padding: 1rem 1.5rem;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  color: #3a2a20;
+}
+
+.group-card h3 {
+  font-weight: 700;
+  color: #5e3b2c;
+  margin-bottom: 1rem;
+}
+
+.group-card ul {
+  padding-left: 1.2rem;
+  font-weight: 500;
+}
+
+.group-card ul li.card {
+  background-color: #dcb49e;
+  border: 1px solid #7a5a49;
+  border-radius: 10px;
+  padding: 1rem;
+  margin-bottom: 0.75rem;
+  color: #3a2a20;
+  font-weight: 600;
+  display: flex;
+  align-items: flex-start;
+  word-break: break-word;
+}
+
+.d-flex.justify-content-center {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.btn-primary-custom,
+.btn-danger-custom {
+  border-radius: 0.375rem;
+  font-weight: 600;
+  width: 45%;
+  padding: 0.6rem 1rem;
+  transition: background-color 0.3s ease;
+  margin-top: 1rem;
+}
+
+@media (max-width: 480px) {
+
+  .btn-primary-custom,
+  .btn-danger-custom {
+    width: 100% !important;
+    margin-top: 0.75rem;
+  }
+
+  .group-card {
+    padding: 1rem;
+    font-size: 14px;
+
+  }
+
+  h4 {
+    color: #5e3b2c;
+    font-size: 2rem;
+  }
+
+  h2.text-center {
+    font-size: 1.8rem;
+  }
+}
+
+.form-control-custom:focus {
+  border-color: #a86d4f;
+  box-shadow: 0 0 5px rgba(168, 109, 79, 0.6);
+  color: #3a2a20;
+}
+
+.form-check-input {
+  background-color: #bd8e6a;
+  border-color: #785235;
+}
+
+.checkboxAge {
+  margin-left: 1px;
+}
+
+.form-check-input:checked {
+  background-color: #6e4b3a !important;
+  border-color: #6e4b3a !important;
+}
+
+label,
+.form-check-label {
+  color: #5e3b2c;
+  font-weight: 600;
+}
+
+.text-danger {
+  font-weight: 700;
+  margin-top: 0.25rem;
+  color: #d64545 !important;
+  text-align: center;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
 }

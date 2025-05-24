@@ -21,7 +21,7 @@
         </div>
 
         <div class="form-check d-flex align-items-center mt-3">
-          <input type="checkbox" id="mixerAge" [(ngModel)]="criteria.mixerAge" class="form-check-input" />
+          <input type="checkbox" id="mixerAge" [(ngModel)]="criteria.mixerAge" class="form-check-input  checkboxAge" />
           <label for="mixerAge" class="form-check-label ms-2">Mixer âge</label>
         </div>
       </div>
@@ -46,6 +46,7 @@
         <div *ngIf="list.generatedGroups && list.generatedGroups.length > 0" class="mt-3">
           <div *ngFor="let group of list.generatedGroups" class="group-card mb-3">
             <h3>{{ group.name }}</h3>
+            
             <ul>
               <li *ngFor="let person of group.persons" class="card mb-2 p-3 d-flex align-items-flex-start" style="
               font-weight: 600;
@@ -64,7 +65,6 @@
         </div>
       </div>
 
-      <!-- Affichage historique -->
       <div *ngIf="list.showSavedGroups" class="p-3 mb-3"
         style="background-color: #ddb393; border: 1px solid #7a5a49; border-radius: 0.375rem; max-width: 600px; margin-top: 20px;">
         <app-group-history [listId]="list.id"></app-group-history>

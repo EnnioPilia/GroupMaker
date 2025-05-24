@@ -46,6 +46,8 @@ h2.text-custom {
   color: #f3cfbc;
   border: 1px solid #50372a;
   font-weight: 700;
+  /* width: 45%; */
+
 }
 
 .btn-primary-custom:hover {
@@ -195,12 +197,10 @@ thead.table-dark {
   }
 }
 @media (max-width: 1199.98px) and (min-width: 768px) {
-  /* Cards moins larges */
   .card.mx-auto.mb-4 {
     max-width: 90% !important;
   }
 
-  /* Colonne formulaire et liste un peu plus étroites et en ligne */
   .col-md-6 {
     width: 48% !important;
   }
@@ -209,17 +209,14 @@ thead.table-dark {
     margin-left: 4% !important;
   }
 
-  /* Formulaire légèrement plus petit */
   form.p-3.bg-form {
     max-width: 100% !important;
   }
 
-  /* Table responsive prend toute la largeur */
   .table-responsive {
     width: 100% !important;
   }
 
-  /* Boutons dans la card prennent leur taille naturelle, pas 100% */
   .btn {
     width: auto !important;
   }

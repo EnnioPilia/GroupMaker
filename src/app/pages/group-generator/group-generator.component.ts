@@ -9,7 +9,6 @@ import { GroupHistoryComponent } from '../group-history/group-history.component'
 
 @Component({
   selector: 'app-group-generator',
-  // standalone: true,
   templateUrl: './group-generator.component.html',
   styleUrls: ['./group-generator.component.css'],
   imports: [CommonModule, FormsModule, GroupHistoryComponent],
