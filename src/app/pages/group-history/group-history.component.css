@@ -58,7 +58,23 @@
   font-weight: 700;
   color: #8b5237;
 }
+.btn-danger-custom {
+  background-color: #d34a4a;
+  color: #f8e7de;
+  border: none;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+  transition: background-color 0.3s ease;
+  width: 36%;
+}
 
+.btn-danger-custom:hover {
+  background-color: #9e1616;
+  color: #fce8e8;
+  cursor: pointer;
+}
 @media (max-width: 480px) {
   .history-container {
     max-width: 100%;

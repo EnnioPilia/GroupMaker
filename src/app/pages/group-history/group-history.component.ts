@@ -11,6 +11,7 @@ import { Group } from '../../core/models/group.model';
 export class GroupHistoryComponent implements OnInit {
   @Input() listId: string | null = null;
   storedGroupHistory: Group[][] = [];
+  @Input() listName: string = '';
 
   ngOnInit(): void {
     this.loadHistory();
@@ -41,4 +42,22 @@ export class GroupHistoryComponent implements OnInit {
       );
     }
   }
+deleteTirage(indexToDelete: number): void {
+  if (!this.listId) return;
+
+  const updatedHistory = [...this.storedGroupHistory];
+
+  updatedHistory.splice(indexToDelete, 1);
+
+  this.storedGroupHistory = updatedHistory;
+
+  localStorage.setItem(
+    `groups-${this.listId}`,
+    JSON.stringify(this.storedGroupHistory)
+  );
+
+  console.log(`Tirage #${indexToDelete + 1} supprimé`);  // debug
+}
+
+
 }
