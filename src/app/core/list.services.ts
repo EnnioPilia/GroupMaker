@@ -20,6 +20,7 @@ export interface List {
 @Injectable({
   providedIn: 'root'
 })
+
 export class ListService {
   private storageKey = 'groupmaker_lists';
 

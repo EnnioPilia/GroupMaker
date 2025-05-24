@@ -16,7 +16,7 @@ export interface User {
 export class AuthService {
   private loggedInUser: User | null = null;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   login(email: string, password: string): Observable<User> {
     return this.http.get<User[]>('assets/data/users.json').pipe(

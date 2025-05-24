@@ -8,7 +8,7 @@ import { Person } from '../../core/models/person.model';
 
 @Component({
   selector: 'app-person-list',
-  standalone: true,
+  // standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './person-list.component.html',
   styleUrls: ['./person-list.component.css']

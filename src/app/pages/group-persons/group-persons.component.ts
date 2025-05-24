@@ -20,7 +20,7 @@ interface Group {
 }
 @Component({
   selector: 'app-group-persons',
-  standalone: true,
+  // standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './group-persons.component.html',
   styleUrls: ['./group-persons.component.css']

@@ -9,7 +9,7 @@ import { Person } from '../../core/models/person.model';
   selector: 'app-lists',
   templateUrl: './lists.component.html',
   styleUrls: ['./lists.component.css'],
-  standalone: true,
+  // standalone: true,
   imports: [CommonModule, FormsModule],
 })
 export class ListsComponent implements OnInit {
@@ -109,49 +109,50 @@ export class ListsComponent implements OnInit {
   }
 
 
-deletePerson(personId: string) {
-  if (!this.selectedListId) return;
-  const list = this.lists.find(l => l.id === this.selectedListId);
-  if (!list) return;
+  deletePerson(personId: string) {
+    if (!this.selectedListId) return;
+    const list = this.lists.find(l => l.id === this.selectedListId);
+    if (!list) return;
 
-  list.persons = list.persons.filter(p => p.id !== personId);
-  this.listService.updateList(list.id, list.name, list.persons);
-  this.persons = list.persons;
-}
+    list.persons = list.persons.filter(p => p.id !== personId);
+    this.listService.updateList(list.id, list.name, list.persons);
+    this.persons = list.persons;
+  }
 
 
   // Récupérer la liste actuellement sélectionnée
   getSelectedList(): List | undefined {
     return this.lists.find(l => l.id === this.selectedListId!);
   }
-
-  // Edition d’une personne (à implémenter selon besoin)
-  edit(person: any) {
-    this.isEditMode = true;
-    this.formPerson = { ...person };
-  }
-
-  // Annuler l’édition ou le formulaire
-  cancelPersonForm() {
-    this.resetForm();
-  }
-
-  // Réinitialiser le formulaire
-  private resetForm() {
-    this.formPerson = {
-      lastName: '',
-      gender: '',
-      frenchLevel: '',
-      isFormerDwwm: false,
-      technicalLevel: '',
-      profile: '',
-      age: null,
-    };
-    this.isEditMode = false;
-  }
-
-  // Navigation vers le générateur de groupes
+  
   goToGroupGenerator() {
     this.router.navigate(['/group-generator']);
   }
 }
+
+  // // Edition d’une personne (à implémenter selon besoin)
+  // edit(person: any) {
+  //   this.isEditMode = true;
+  //   this.formPerson = { ...person };
+  // }
+
+  // // Annuler l’édition ou le formulaire
+  // cancelPersonForm() {
+  //   this.resetForm();
+  // }
+
+  // // Réinitialiser le formulaire
+  // private resetForm() {
+  //   this.formPerson = {
+  //     lastName: '',
+  //     gender: '',
+  //     frenchLevel: '',
+  //     isFormerDwwm: false,
+  //     technicalLevel: '',
+  //     profile: '',
+  //     age: null,
+  //   };
+  //   this.isEditMode = false;
+  // }
+
+  // Navigation vers le générateur de groupes

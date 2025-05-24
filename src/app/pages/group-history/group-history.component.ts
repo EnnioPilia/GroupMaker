@@ -4,7 +4,7 @@ import { Group } from '../../core/models/group.model';
 
 @Component({
   selector: 'app-group-history',
-  standalone: true,
+  // standalone: true,
   imports: [CommonModule],
   templateUrl: './group-history.component.html',
   styleUrls: ['./group-history.component.css'],
