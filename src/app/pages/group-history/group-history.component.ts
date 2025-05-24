@@ -42,22 +42,22 @@ export class GroupHistoryComponent implements OnInit {
       );
     }
   }
-deleteTirage(indexToDelete: number): void {
-  if (!this.listId) return;
+  deleteTirage(indexToDelete: number): void {
+    if (!this.listId) return;
 
-  const updatedHistory = [...this.storedGroupHistory];
+    const updatedHistory = [...this.storedGroupHistory];
 
-  updatedHistory.splice(indexToDelete, 1);
+    updatedHistory.splice(indexToDelete, 1);
 
-  this.storedGroupHistory = updatedHistory;
+    this.storedGroupHistory = updatedHistory;
 
-  localStorage.setItem(
-    `groups-${this.listId}`,
-    JSON.stringify(this.storedGroupHistory)
-  );
+    localStorage.setItem(
+      `groups-${this.listId}`,
+      JSON.stringify(this.storedGroupHistory)
+    );
 
-  console.log(`Tirage #${indexToDelete + 1} supprimé`);  // debug
-}
+    console.log(`Tirage #${indexToDelete + 1} supprimé`);  // debug
+  }
 
 
 }

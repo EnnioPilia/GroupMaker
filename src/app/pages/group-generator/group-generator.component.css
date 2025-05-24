@@ -268,10 +268,9 @@ ul {
   border-color: #785235;
 }
 
-.checkboxAge {
-  margin-left: 1px;
+.age{
+  margin-left: 0px;
 }
-
 .form-check-input:checked {
   background-color: #6e4b3a !important;
   border-color: #6e4b3a !important;
